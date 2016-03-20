@@ -1,0 +1,19 @@
+Use Cases for Due Now:
+
+1. Register (?)
+2. Create a task
+	a. Write description (name)
+	b. Write deadline
+		i. change deadline
+	c. Set priority level
+	d. Set difficulty level
+	e. Set/Specify type of task
+3. Start a task
+	i. postpone a task
+	ii. "cram" a task
+4. End a task
+
+
+Extends: alternate events (main event <-- alternate events)
+Include: when you need one case to do this case (kailangan --> nangangailangan)
+	
