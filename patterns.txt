@@ -1,0 +1,23 @@
+Observer/Obsrvable
+	- notifications
+Factory
+	- creating tasks
+Strategy
+	- //i forgot hehe
+Decorator
+	- for postponing and cramming (but further feature)
+Singleton
+	- for database
+Iterator
+	- for displaying all tasks?
+State
+	- doing? done? pending? GG-mode?
+	
+	
+preliminary assumption that they sleep @ 10:00 and wakes at 6:00
+prio level "ages" as long as you're not doing
+
+try gamifying!
+	- streaks (consecutive na hindi nag-postpone)
+	- scoring system
+each user has its own instance of database
