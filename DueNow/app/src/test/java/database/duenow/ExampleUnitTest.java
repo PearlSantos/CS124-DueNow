@@ -1,4 +1,4 @@
-package DueNow.task;
+package DueNow.decoratorfactory;
 
 import org.junit.Test;
 
