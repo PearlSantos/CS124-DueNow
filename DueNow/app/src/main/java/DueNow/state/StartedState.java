@@ -20,7 +20,7 @@ public class StartedState extends State {
     public void postponeTask() {
         message = "Postponed until: ";
         //recompute recommended start time
-        // decrease timeLeft
+        // decrease timeNeeded
         // add to timeInterval
         t.setState(new PostponedState(t));
 
