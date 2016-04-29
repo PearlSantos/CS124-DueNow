@@ -1,5 +1,9 @@
 package DueNow.state;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import DueNow.OrganizingTasks;
 import DueNow.Task;
 
 /**
@@ -7,6 +11,7 @@ import DueNow.Task;
  */
 public class StartedState extends State {
 
+    private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
     public StartedState(Task task){
         t = task;
     }
@@ -19,9 +24,20 @@ public class StartedState extends State {
     @Override
     public void postponeTask() {
         message = "Postponed until: ";
-        //recompute recommended start time
-        // decrease timeNeeded
-        // add to timeInterval
+        //recompute rec start time
+        OrganizingTasks organizing = new OrganizingTasks();
+        organizing.postpone(t);
+        message += f.format(t.getRecommendedStartTime());
+
+        // decrease time needed
+        Calendar currTime = Calendar.getInstance();
+        long milli = currTime.getTime().getTime() - t.getTimeStarted().getTime().getTime();
+        int mins = (int) (milli / (1000)) / 60;
+        t.setTimeNeeded(t.getTimeNeeded() - mins);
+
+        // add to time interval
+        t.setTimeInterval(t.getTimeInterval() + mins);
+
         t.setState(new PostponedState(t));
 
     }
@@ -31,8 +47,14 @@ public class StartedState extends State {
         message = "You're finished? Awesome!";
 
         //get timeInterval between time start
+        Calendar currTime = Calendar.getInstance();
+        long milli = currTime.getTime().getTime() - t.getTimeStarted().getTime().getTime();
+        int mins = (int) (milli / (1000)) / 60;
+        t.setTimeNeeded(0);
         //transfer task to finished tasks
+
         // set timeInterval
+        t.setTimeInterval(t.getTimeInterval() + mins);
 
         t.setState(new FinishedState());
     }

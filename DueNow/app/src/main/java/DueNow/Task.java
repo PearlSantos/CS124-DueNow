@@ -75,9 +75,9 @@ public class Task {
         return recommendedTimeFinish;
     }
 
-    public void setRecommendedTimeFinish(int restTime) {
+    public void setRecommendedTimeFinish() {
         Calendar cal = (Calendar) recommendedStartTime.clone();
-        cal.add(Calendar.MINUTE, timeNeeded + restTime);
+        cal.add(Calendar.MINUTE, timeNeeded);
         this.recommendedTimeFinish = cal;
     }
 
@@ -92,6 +92,8 @@ public class Task {
     public int getTimeNeeded(){
         return this.timeNeeded;
     }
+
+    public void setTimeNeeded(int timeNeeded){ this.timeNeeded = timeNeeded;}
 
     public State getState() {
         return state;

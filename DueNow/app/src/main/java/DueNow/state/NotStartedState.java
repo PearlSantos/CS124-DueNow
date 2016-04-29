@@ -1,9 +1,11 @@
 package DueNow.state;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import DueNow.OrganizingTasks;
 import DueNow.Task;
 
 /**
@@ -11,14 +13,14 @@ import DueNow.Task;
  */
 public class NotStartedState extends State {
     private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
-
     public NotStartedState(Task task){
         t = task;
     }
     @Override
     public void startTask() {
-        Date start = Calendar.getInstance().getTime();
+        Calendar start = Calendar.getInstance();
         message = "Task Started:" + f.format(start);
+        // activate start time
         t.setTimeStarted(start);
         t.setState(new StartedState(t));
     }
@@ -26,7 +28,10 @@ public class NotStartedState extends State {
     @Override
     public void postponeTask() {
         message = "Postponed until: ";
-        //recompute recommendedStartTime
+        // recompute rec start time
+        OrganizingTasks organizing = new OrganizingTasks();
+        organizing.postpone(t);
+        message += f.format(t.getRecommendedStartTime());
         t.setState(new PostponedState(t));
     }
 

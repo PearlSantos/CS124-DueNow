@@ -14,52 +14,120 @@ public class OrganizingTasks {
     private final int REST_TIME = 30; //mins
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 
-    public OrganizingTasks(ArrayList<Task> list){
-        this.list = list;
+    public OrganizingTasks() {
+        this.list = ListOfTasks.getList();
     }
 
-    public ArrayList<Task> addTask(Task newTask){
+    public ArrayList<Task> getList(){
+        return list;
+    }
+
+    public void addTask(Task newTask) {
         ArrayList<Task> newList = new ArrayList<>();
         Calendar currTime = Calendar.getInstance();
         int intervalInHour = getIntervalToDeadline(newTask, currTime);
-        if(list.isEmpty()){
-            Calendar recStartTime = (Calendar) currTime.clone();
-            recStartTime.add(Calendar.HOUR, intervalInHour/2);
+        Calendar recStartTime;
+        int listSize = list.size();
+        if (list.isEmpty()) {
+            recStartTime = (Calendar) currTime.clone();
+            recStartTime.add(Calendar.HOUR, intervalInHour / 2);
             newTask.setRecommendedStartTime(recStartTime);
-            newTask.setRecommendedTimeFinish(REST_TIME);
+            newTask.setRecommendedTimeFinish();
             newList.add(newTask);
             System.out.println("REC START TIME: " + dateFormat.format(newTask.getRecommendedStartTime()));
-            System.out.println("REC FINISH TIME: " +  dateFormat.format(newTask.getRecommendedTimeFinish()));
-        } else{
-            Calendar setRecStartTime = (Calendar) currTime.clone();
-            setRecStartTime.add(Calendar.HOUR, intervalInHour / 2);
+            System.out.println("REC FINISH TIME: " + dateFormat.format(newTask.getRecommendedTimeFinish()));
+        } else {
+            //  Calendar setRecStartTime = (Calendar) currTime.clone();
+            //  setRecStartTime.add(Calendar.HOUR, intervalInHour / 2);
             int indexOfList = 0;
-            for(int i = 0; i <list.size(); i++){
-                if(true){
-
-                } else{
-                    newList.add(indexOfList, list.get(i));
+            while (indexOfList < list.size()) {
+                Task analyzeNow = list.get(indexOfList);
+                if (getIntervalToDeadline(analyzeNow, currTime) > getIntervalToDeadline(newTask, currTime)) {
+                    recStartTime = (Calendar) analyzeNow.getRecommendedTimeFinish().clone();
+                    recStartTime.add(Calendar.MINUTE, REST_TIME);
+                    newTask.setRecommendedStartTime(recStartTime);
+                    newTask.setRecommendedTimeFinish();
+                    newList.add(newTask);
+                    adjustRecTime(newList, indexOfList);
+                } else if (getIntervalToDeadline(analyzeNow, currTime) == getIntervalToDeadline(newTask, currTime)) {
+                    if (analyzeNow.getPriority() > newTask.getPriority()) {
+                        recStartTime = (Calendar) analyzeNow.getRecommendedTimeFinish().clone();
+                        recStartTime.add(Calendar.MINUTE, REST_TIME);
+                        newTask.setRecommendedStartTime(recStartTime);
+                        newTask.setRecommendedTimeFinish();
+                        newList.add(newTask);
+                        adjustRecTime(newList, indexOfList);
+                    } else {
+                        newList.add(analyzeNow);
+                        recStartTime = (Calendar) analyzeNow.getRecommendedTimeFinish().clone();
+                        recStartTime.add(Calendar.MINUTE, REST_TIME);
+                        newTask.setRecommendedStartTime(recStartTime);
+                        newTask.setRecommendedTimeFinish();
+                        newList.add(newTask);
+                        indexOfList++;
+                        adjustRecTime(newList, indexOfList);
+                    }
+                    break;
+                } else {
+                    newList.add(analyzeNow);
                     indexOfList++;
                 }
+            }
+            if(listSize == newList.size()){
+                recStartTime = (Calendar) newList.get(newList.size()-1).getRecommendedTimeFinish().clone();
+                recStartTime.add(Calendar.MINUTE, REST_TIME);
+                newTask.setRecommendedStartTime(recStartTime);
+                newTask.setRecommendedTimeFinish();
+                newList.add(newTask);
             }
         }
 
 
-
-
-        return newList;
+        list = newList;
     }
 
-    public int getIntervalToDeadline(Task t, Calendar currTime){
-        long milli = t.deadline.getTime().getTime() - currTime.getTime().getTime();
+    public void adjustRecTime(ArrayList<Task> newList, int indexStart) {
+        while (indexStart < list.size()) {
+            Task prevTask = list.get(indexStart-1);
+            Task nowTask = list.get(indexStart);
+            Calendar recStartTime = (Calendar) prevTask.getRecommendedTimeFinish().clone();
+            recStartTime.add(Calendar.MINUTE, REST_TIME);
+            nowTask.setRecommendedStartTime(recStartTime);
+            nowTask.setRecommendedTimeFinish();
+            newList.add(nowTask);
+            indexStart++;
+        }
+    }
+
+    public int getIntervalToDeadline(Task t, Calendar currTime) {
+        long milli = t.getDeadline().getTime().getTime() - currTime.getTime().getTime();
         int hour = (int) milli / (60 * 60 * 1000) % 24;
         return hour;
     }
 
-    public boolean checkDeadline(Task t){
-        int hasTime  = t.deadline.getTime().compareTo(t.getRecommendedStartTime().getTime());
-        if(hasTime > 0) return true;
+    public boolean checkDeadline(Task t) {
+        int hasTime = t.getDeadline().getTime().compareTo(t.getRecommendedStartTime().getTime());
+        if (hasTime > 0) return true;
         return false;
     }
 
+    public void delete(int index){
+        list.remove(index);
+    }
+
+    public void delete(Task task){
+        list.remove(task);
+    }
+
+    public void postpone(int index){
+        Task postponed = list.get(index);
+        list.remove(index);
+        addTask(postponed);
+    }
+
+    public void postpone(Task task){
+        Task postponed = task;
+        list.remove(postponed);
+        addTask(postponed);
+    }
 }
