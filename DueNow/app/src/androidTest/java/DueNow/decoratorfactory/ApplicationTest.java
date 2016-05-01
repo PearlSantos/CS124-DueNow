@@ -1,4 +1,4 @@
-package DueNow.decoratorfactory;
+package duenow.decoratorfactory;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

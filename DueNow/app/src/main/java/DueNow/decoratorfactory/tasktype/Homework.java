@@ -1,6 +1,6 @@
-package DueNow.decoratorfactory.tasktype;
+package duenow.decoratorfactory.tasktype;
 
-import DueNow.Task;
+import duenow.Task;
 
 /**
  * Created by elysi on 4/1/2016.

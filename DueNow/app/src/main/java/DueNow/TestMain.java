@@ -1,14 +1,14 @@
-package DueNow;
+package duenow;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import DueNow.decoratorfactory.TaskSimpleFactory;
-import DueNow.decoratorfactory.difficulty.EasyDifficulty;
-import DueNow.decoratorfactory.difficulty.HardDifficulty;
-import DueNow.decoratorfactory.difficulty.MedDifficulty;
+import duenow.decoratorfactory.TaskSimpleFactory;
+import duenow.decoratorfactory.difficulty.EasyDifficulty;
+import duenow.decoratorfactory.difficulty.HardDifficulty;
+import duenow.decoratorfactory.difficulty.MedDifficulty;
 
 /**
  * Created by elysi on 4/16/2016.

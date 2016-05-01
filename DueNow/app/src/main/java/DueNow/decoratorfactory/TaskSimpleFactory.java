@@ -1,14 +1,14 @@
-package DueNow.decoratorfactory;
+package duenow.decoratorfactory;
 
-import DueNow.Task;
-import DueNow.decoratorfactory.tasktype.Homework;
-import DueNow.decoratorfactory.tasktype.LongTest;
-import DueNow.decoratorfactory.tasktype.Orals;
-import DueNow.decoratorfactory.tasktype.Other;
-import DueNow.decoratorfactory.tasktype.Paper;
-import DueNow.decoratorfactory.tasktype.Project;
-import DueNow.decoratorfactory.tasktype.Quiz;
-import DueNow.decoratorfactory.tasktype.Reading;
+import duenow.Task;
+import duenow.decoratorfactory.tasktype.Homework;
+import duenow.decoratorfactory.tasktype.LongTest;
+import duenow.decoratorfactory.tasktype.Orals;
+import duenow.decoratorfactory.tasktype.Other;
+import duenow.decoratorfactory.tasktype.Paper;
+import duenow.decoratorfactory.tasktype.Project;
+import duenow.decoratorfactory.tasktype.Quiz;
+import duenow.decoratorfactory.tasktype.Reading;
 
 /**
  * Created by elysi on 4/1/2016.

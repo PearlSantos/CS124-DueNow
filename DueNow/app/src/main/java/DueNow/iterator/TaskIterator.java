@@ -1,4 +1,4 @@
-package DueNow.iterator;
+package duenow.iterator;
 
 import java.util.Iterator;
 

@@ -1,11 +1,9 @@
-package DueNow;
+package duenow;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
 /**
  * Created by elysi on 4/20/2016.
  */
