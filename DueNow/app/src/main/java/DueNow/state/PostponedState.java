@@ -19,7 +19,7 @@ public class PostponedState extends State {
     @Override
     public void startTask() {
         message = "Starting task: ";
-        Date start = Calendar.getInstance().getTime();
+        Calendar start = Calendar.getInstance();
         message = "Originally Started: " + f.format(t.getTimeStarted()) + "\nTime Started: " + f.format(start);
         t.setTimeStarted(start);
         t.setState(new StartedState(t));

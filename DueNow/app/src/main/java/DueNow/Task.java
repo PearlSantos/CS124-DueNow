@@ -1,5 +1,6 @@
 package DueNow;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import DueNow.state.NotStartedState;
@@ -9,16 +10,18 @@ import DueNow.state.State;
  * Created by elysi on 3/30/2016.
  */
 public class Task {
-    protected String name;
-    protected String description;
-    protected Date deadline;
-    protected Date timeStarted;
-    protected Date timeFinished;
-    protected Date recommendedStartTime;
-    protected int timeLeft; // timeLeft is in minutes
+    protected String name; // given by user
+    protected String description; //given by user
+    protected Calendar deadline; //given by user
+    protected Calendar timeStarted; //given by user, later on
+    protected Calendar timeFinished;  //given by user, laterOn
+    protected Calendar recommendedStartTime; // dynamically created
+    protected Calendar recommendedTimeFinish; // dynamically created
     protected int timeInterval = 0; // in minutes, total time user worked on task
     protected int timeNeeded; // timeNeeded is in minutes
     protected State state = new NotStartedState(this);
+    protected int priority;
+    // don't forget to wrap in difficulty!
 
     public String getName() {
         return name;
@@ -36,36 +39,46 @@ public class Task {
         this.description = description;
     }
 
-    public Date getDeadline() {
+    public Calendar getDeadline() {
         return deadline;
     }
 
-    public void setDeadline(Date deadline) {
+    public void setDeadline(Calendar deadline) {
         this.deadline = deadline;
     }
 
-    public Date getTimeStarted() {
+    public Calendar getTimeStarted() {
         return timeStarted;
     }
 
-    public void setTimeStarted(Date timeStarted) {
+    public void setTimeStarted(Calendar timeStarted) {
         this.timeStarted = timeStarted;
     }
 
-    public Date getTimeFinished() {
+    public Calendar getTimeFinished() {
         return timeFinished;
     }
 
-    public void setTimeFinished(Date timeFinished) {
+    public void setTimeFinished(Calendar timeFinished) {
         this.timeFinished = timeFinished;
     }
 
-    public Date getRecommendedStartTime() {
+    public Calendar getRecommendedStartTime() {
         return recommendedStartTime;
     }
 
-    public void setRecommendedStartTime(Date recommendedStartTime) {
+    public void setRecommendedStartTime(Calendar recommendedStartTime) {
         this.recommendedStartTime = recommendedStartTime;
+    }
+
+    public Calendar getRecommendedTimeFinish() {
+        return recommendedTimeFinish;
+    }
+
+    public void setRecommendedTimeFinish() {
+        Calendar cal = (Calendar) recommendedStartTime.clone();
+        cal.add(Calendar.MINUTE, timeNeeded);
+        this.recommendedTimeFinish = cal;
     }
 
     public int getTimeInterval() {
@@ -76,17 +89,11 @@ public class Task {
         this.timeInterval = timeInterval;
     }
 
-    public int getTimeLeft() {
-        return timeLeft;
-    }
-
-    public void setTimeLeft(int timeLeft) {
-        this.timeLeft = timeLeft;
-    }
-
     public int getTimeNeeded(){
         return this.timeNeeded;
     }
+
+    public void setTimeNeeded(int timeNeeded){ this.timeNeeded = timeNeeded;}
 
     public State getState() {
         return state;
@@ -94,5 +101,13 @@ public class Task {
 
     public void setState(State state) {
         this.state = state;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }
