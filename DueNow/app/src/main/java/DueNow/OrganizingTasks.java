@@ -34,8 +34,6 @@ public class OrganizingTasks {
             newTask.setRecommendedStartTime(recStartTime);
             newTask.setRecommendedTimeFinish();
             newList.add(newTask);
-            System.out.println("REC START TIME: " + dateFormat.format(newTask.getRecommendedStartTime()));
-            System.out.println("REC FINISH TIME: " + dateFormat.format(newTask.getRecommendedTimeFinish()));
         } else {
             //  Calendar setRecStartTime = (Calendar) currTime.clone();
             //  setRecStartTime.add(Calendar.HOUR, intervalInHour / 2);
@@ -43,27 +41,14 @@ public class OrganizingTasks {
             while (indexOfList < list.size()) {
                 Task analyzeNow = list.get(indexOfList);
                 if (getIntervalToDeadline(analyzeNow, currTime) > getIntervalToDeadline(newTask, currTime)) {
-                    recStartTime = (Calendar) analyzeNow.getRecommendedTimeFinish().clone();
-                    recStartTime.add(Calendar.MINUTE, REST_TIME);
-                    newTask.setRecommendedStartTime(recStartTime);
-                    newTask.setRecommendedTimeFinish();
-                    newList.add(newTask);
+                    newList.add(setRecStartTime(analyzeNow, newTask));
                     adjustRecTime(newList, indexOfList);
                 } else if (getIntervalToDeadline(analyzeNow, currTime) == getIntervalToDeadline(newTask, currTime)) {
                     if (analyzeNow.getPriority() > newTask.getPriority()) {
-                        recStartTime = (Calendar) analyzeNow.getRecommendedTimeFinish().clone();
-                        recStartTime.add(Calendar.MINUTE, REST_TIME);
-                        newTask.setRecommendedStartTime(recStartTime);
-                        newTask.setRecommendedTimeFinish();
-                        newList.add(newTask);
+                        newList.add(setRecStartTime(analyzeNow, newTask));
                         adjustRecTime(newList, indexOfList);
                     } else {
-                        newList.add(analyzeNow);
-                        recStartTime = (Calendar) analyzeNow.getRecommendedTimeFinish().clone();
-                        recStartTime.add(Calendar.MINUTE, REST_TIME);
-                        newTask.setRecommendedStartTime(recStartTime);
-                        newTask.setRecommendedTimeFinish();
-                        newList.add(newTask);
+                        newList.add(setRecStartTime(analyzeNow, newTask));
                         indexOfList++;
                         adjustRecTime(newList, indexOfList);
                     }
@@ -73,12 +58,9 @@ public class OrganizingTasks {
                     indexOfList++;
                 }
             }
+            //if add to last index
             if(listSize == newList.size()){
-                recStartTime = (Calendar) newList.get(newList.size()-1).getRecommendedTimeFinish().clone();
-                recStartTime.add(Calendar.MINUTE, REST_TIME);
-                newTask.setRecommendedStartTime(recStartTime);
-                newTask.setRecommendedTimeFinish();
-                newList.add(newTask);
+                newList.add(setRecStartTime(newList.get(newList.size()-1), newTask));
             }
         }
 
@@ -88,19 +70,32 @@ public class OrganizingTasks {
 
     public void adjustRecTime(ArrayList<Task> newList, int indexStart) {
         while (indexStart < list.size()) {
-            Task prevTask = list.get(indexStart-1);
-            Task nowTask = list.get(indexStart);
-            Calendar recStartTime = (Calendar) prevTask.getRecommendedTimeFinish().clone();
-            recStartTime.add(Calendar.MINUTE, REST_TIME);
-            nowTask.setRecommendedStartTime(recStartTime);
-            nowTask.setRecommendedTimeFinish();
-            newList.add(nowTask);
+            Task prevTask;
+            Task nowTask;
+            if(indexStart > 0) {
+                prevTask = list.get(indexStart - 1);
+                nowTask = list.get(indexStart);
+            } else{
+                prevTask = newList.get(0);
+                nowTask = list.get(0);
+            }
+            newList.add(setRecStartTime(prevTask, nowTask));
             indexStart++;
         }
     }
 
+    public Task setRecStartTime(Task analyzeNow, Task nowTask){
+        Calendar recStartTime = (Calendar) analyzeNow.getRecommendedTimeFinish().clone();
+        recStartTime.add(Calendar.MINUTE, REST_TIME);
+        nowTask.setRecommendedStartTime(recStartTime);
+        nowTask.setRecommendedTimeFinish();
+        return nowTask;
+    }
+
     public int getIntervalToDeadline(Task t, Calendar currTime) {
+        //System.out.println("Deadline: " + dateFormat.format(t.deadline.getTime()));
         long milli = t.getDeadline().getTime().getTime() - currTime.getTime().getTime();
+      //  long milli = currTime.getTime().getTime() - currTime.getTime().getTime();
         int hour = (int) milli / (60 * 60 * 1000) % 24;
         return hour;
     }
