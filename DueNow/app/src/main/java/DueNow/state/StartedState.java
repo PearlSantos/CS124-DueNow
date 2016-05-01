@@ -1,10 +1,10 @@
-package DueNow.state;
+package duenow.state;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import DueNow.OrganizingTasks;
-import DueNow.Task;
+import duenow.OrganizingTasks;
+import duenow.Task;
 
 /**
  * Created by elysi on 4/16/2016.

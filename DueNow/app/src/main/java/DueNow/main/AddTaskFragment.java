@@ -1,4 +1,4 @@
-package DueNow.main;
+package duenow.main;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import DueNow.decoratorfactory.R;
+import duenow.decoratorfactory.R;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,4 +1,4 @@
-package DueNow.main;
+package duenow.main;
 
 import android.content.Context;
 import android.support.v4.app.FragmentManager;
@@ -14,8 +14,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import DueNow.decoratorfactory.R;
-import DueNow.viewgroup.FlyOutContainer;
+import duenow.decoratorfactory.R;
+import duenow.viewgroup.FlyOutContainer;
 
 public class MainActivity extends AppCompatActivity {
 

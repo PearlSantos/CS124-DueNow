@@ -1,8 +1,6 @@
-package DueNow.state;
+package duenow.state;
 
-import java.util.ArrayList;
-
-import DueNow.Task;
+import duenow.Task;
 
 /**
  * Created by elysi on 4/16/2016.

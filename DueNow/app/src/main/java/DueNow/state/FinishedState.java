@@ -1,4 +1,4 @@
-package DueNow.state;
+package duenow.state;
 
 /**
  * Created by elysi on 4/16/2016.

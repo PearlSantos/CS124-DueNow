@@ -1,4 +1,4 @@
-package DueNow.viewgroup;
+package duenow.viewgroup;
 
 /**
  * Created by Pearl Santos on 4/29/2016.
@@ -11,7 +11,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.Scroller;
 import android.os.Handler;
-import android.widget.Toolbar;
 
 
 public class FlyOutContainer extends LinearLayout {

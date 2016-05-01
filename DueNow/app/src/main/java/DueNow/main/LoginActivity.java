@@ -1,11 +1,11 @@
-package DueNow.main;
+package duenow.main;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import DueNow.decoratorfactory.R;
+import duenow.decoratorfactory.R;
 
 public class LoginActivity extends AppCompatActivity {
 

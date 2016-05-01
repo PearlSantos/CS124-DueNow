@@ -1,10 +1,9 @@
-package DueNow;
+package duenow;
 
 import java.util.Calendar;
-import java.util.Date;
 
-import DueNow.state.NotStartedState;
-import DueNow.state.State;
+import duenow.state.NotStartedState;
+import duenow.state.State;
 
 /**
  * Created by elysi on 3/30/2016.

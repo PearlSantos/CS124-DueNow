@@ -1,7 +1,7 @@
-package DueNow.decoratorfactory.difficulty;
+package duenow.decoratorfactory.difficulty;
 
-import DueNow.Task;
-import DueNow.decoratorfactory.TaskDecorator;
+import duenow.Task;
+import duenow.decoratorfactory.TaskDecorator;
 
 /**
  * Created by elysi on 4/1/2016.
