@@ -12,6 +12,7 @@ public class Task {
     protected String name; // given by user
     protected String description; //given by user
     protected Calendar deadline; //given by user
+    protected int priority; // given by user
     protected Calendar timeStarted; //given by user, later on
     protected Calendar timeFinished;  //given by user, laterOn
     protected Calendar recommendedStartTime; // dynamically created
@@ -19,7 +20,7 @@ public class Task {
     protected int timeInterval = 0; // in minutes, total time user worked on task
     protected int timeNeeded; // timeNeeded is in minutes
     protected State state = new NotStartedState(this);
-    protected int priority;
+
     // don't forget to wrap in difficulty!
 
     public String getName() {
