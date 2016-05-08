@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,10 +30,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.root = (FlyOutContainer) this.getLayoutInflater().inflate(R.layout.activity_main, null);
+//        list = (ListView) root.findViewById(R.id.menu_item);
+//       // list.setAdapter(new CustomAdapter(this, options, imgID));
+//        list.setAdapter(new ArrayAdapter<String>(this, R.layout.dummy_item, options));
+//        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, new AddTaskFragment()).commit();
-        list = (ListView) root.findViewById(R.id.menu_item);
-        list.setAdapter(new CustomAdapter(this, options, imgID));
         setContentView(root);
     }
 
@@ -56,6 +59,10 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void toggleMenu(View v){
+        this.root.toggleMenu();
     }
 }
 

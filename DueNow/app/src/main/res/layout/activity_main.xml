@@ -5,7 +5,6 @@
 
     <!--menu-->
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
@@ -52,20 +51,124 @@
         </android.support.v7.widget.Toolbar>
 
         <LinearLayout
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:orientation="vertical">
-			
-			<ListView
-                android:id="@+id/menu_item"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:padding="@dimen/headerMargin"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:src="@mipmap/ic_view_list_black_24dp"
+                    android:padding="@dimen/headerMargin"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/subheading2"
+                    android:text="Tasks"/>
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/headerMargin"
+                android:paddingRight="@dimen/headerMargin"
+                android:paddingBottom="@dimen/headerMargin"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:src="@mipmap/ic_watch_later_black_24dp"
+                    android:padding="@dimen/headerMargin"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/subheading2"
+                    android:text="Postponed Tasks"/>
+            </LinearLayout>
 
-			
-		</LinearLayout>
-            
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/headerMargin"
+                android:paddingRight="@dimen/headerMargin"
+                android:paddingBottom="@dimen/headerMargin"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:src="@mipmap/ic_check_black_24dp"
+                    android:padding="@dimen/headerMargin"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/subheading2"
+                    android:text="Finished Tasks"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/headerMargin"
+                android:paddingRight="@dimen/headerMargin"
+                android:paddingBottom="@dimen/headerMargin"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:src="@mipmap/ic_account_box_black_24dp"
+                    android:padding="@dimen/headerMargin"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/subheading2"
+                    android:text="Account Settings"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/headerMargin"
+                android:paddingRight="@dimen/headerMargin"
+                android:paddingBottom="@dimen/headerMargin"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:gravity="center"
+                    android:src="@mipmap/ic_exit_to_app_black_24dp"
+                    android:padding="@dimen/headerMargin"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/activity_vertical_margin"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/subheading2"
+                    android:text="Logout"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
     </LinearLayout>
+
+
+
 
 
     <!--main frame-->
@@ -87,6 +190,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="left"
+                android:onClick="toggleMenu"
                 android:background="@android:color/transparent"
                 android:src="@mipmap/ic_menu_white_24dp"/>
 
@@ -95,9 +199,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tasks"
-                android:layout_marginLeft="@dimen/headerMargin"
-                android:textColor="#FFFFFF"
-                android:textSize="@dimen/display2" />
+                android:textSize="@dimen/headline"
+                android:layout_marginLeft="@dimen/icon_size2"
+                android:textColor="#FFFFFF" />
         </android.support.v7.widget.Toolbar>
 
        <FrameLayout
@@ -108,5 +212,6 @@
 
        </FrameLayout>
     </LinearLayout>
+
 
 </duenow.viewgroup.FlyOutContainer>

@@ -7,6 +7,8 @@
     <color name="colorAccentRed">#F44336</color>
     <color name="colorAccentGreen">#4CAF50</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="grey">#E0E0E0</color>
 
 
 
