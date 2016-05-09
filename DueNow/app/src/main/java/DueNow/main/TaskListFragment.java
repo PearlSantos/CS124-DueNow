@@ -7,11 +7,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import duenow.decoratorfactory.R;
+import duenow.item.EntryItem;
+import duenow.item.Item;
+import duenow.item.SectionItem;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,10 +74,22 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        ArrayList<Item> items = new ArrayList<>();
+        items.add(new SectionItem("Monday"));
+        items.add(new EntryItem("Hi","Hi","Hi"));
+        items.add(new EntryItem("Hello","Hello","Hello"));
+        items.add(new EntryItem("How","How","How"));
+        items.add(new SectionItem("Tuesday"));
+        items.add(new EntryItem("Are","Are","Are"));
+        items.add(new EntryItem("You","You","You"));
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        //ImageButton FAB = (ImageButton) rootView.findViewById(R.id.fabButton);
+
+
         ListView taskList = (ListView) rootView.findViewById(R.id.main_listview);
-        //taskList.setAdapter(new CustomAdapter(this,options, optionIcons));
+       // taskList.setAdapter(new CustomMainAdapter(this.getContext(), taskName, dateStart, deadline));
+        taskList.setAdapter(new EntryAdapter(this.getContext(), items));
         return rootView;
     }
 
@@ -105,53 +124,46 @@ public class TaskListFragment extends Fragment {
 
 
 }
-class CustomAdapter2 extends BaseAdapter {
-    String[] options;
+
+
+class EntryAdapter extends ArrayAdapter {
+    ArrayList<Item> items;
     Context context;
-    int[] imageID;
-    private static LayoutInflater inflater = null;
-
-    public CustomAdapter2(Context mainActivity, String[] optionsList, int[] optionIcons) {
-        options = optionsList;
-        context = mainActivity;
-        imageID = optionIcons;
-        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public int getCount() {
-        return 0;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return position;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    public class Holder {
-        //ImageView img;
-        TextView taskName;
-        TextView timeStart;
-        TextView deadline;
+    private static LayoutInflater vi = null;
+    public EntryAdapter(Context context,ArrayList<Item> items) {
+        super(context,0, items);
+        this.context = context;
+        this.items = items;
+        vi = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Holder holder = new Holder();
-        View rowView;
-        rowView = inflater.inflate(R.layout.list_item, null);
-        holder.taskName = (TextView) rowView.findViewById(R.id.taskname);
-        holder.timeStart = (TextView) rowView.findViewById(R.id.starting_date);
-        holder.deadline = (TextView) rowView.findViewById(R.id.deadline);
-
-        //holder.tv.setText(options[position]);
-
+        View rowView = convertView;
+        final Item i = items.get(position);
+        if (i != null) {
+            if(i.isSection()){
+                SectionItem si = (SectionItem)i;
+                rowView = vi.inflate(R.layout.dummy_item, null);
+                rowView.setOnClickListener(null);
+                rowView.setOnLongClickListener(null);
+                rowView.setLongClickable(false);
+                final TextView sectionView = (TextView) rowView.findViewById(R.id.divider);
+                sectionView.setText(si.desc);
+            } else {
+                EntryItem ei = (EntryItem)i;
+                rowView = vi.inflate(R.layout.list_item, null);
+                TextView taskName = (TextView) rowView.findViewById(R.id.taskname);
+                TextView timeStart = (TextView) rowView.findViewById(R.id.starting_date);
+                TextView deadline = (TextView) rowView.findViewById(R.id.deadline);
+                if(taskName != null) taskName.setText(ei.taskname);
+                if(timeStart != null) timeStart.setText(ei.dateStart);
+                if(deadline != null) deadline.setText(ei.deadLine);
+            }
+        }
         return rowView;
     }
-
 }
+
+
+
