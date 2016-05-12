@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
 import duenow.decoratorfactory.R;
 import duenow.viewgroup.FlyOutContainer;
 
@@ -34,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         this.root = (FlyOutContainer) this.getLayoutInflater().inflate(R.layout.activity_main, null);
         list = (ListView) root.findViewById(R.id.menu);
 		list.setAdapter(new CustomList(this, options, imgID));
