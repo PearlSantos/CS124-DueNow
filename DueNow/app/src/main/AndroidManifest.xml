@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="duenow.decoratorfactory" >
+    package="duenow.decoratorfactory">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,10 +9,27 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <uses-permission android:name="android.permission.INTERNET" />
+        <meta-data
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.firebase.ui.TwitterKey"
+            android:value="@string/twitter_app_key" />
+        <meta-data
+            android:name="com.firebase.ui.TwitterSecret"
+            android:value="@string/twitter_app_secret" />
+
         <activity
-            android:name="duenow.notifications.NotifyUser">
+            android:name="duenow.main.MainActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,15 +37,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="duenow.main.MainActivity"
-            android:label="@string/app_name"
-            android:windowSoftInputMode="adjustPan" >
-
-        </activity>
-        <activity
             android:name="duenow.main.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>

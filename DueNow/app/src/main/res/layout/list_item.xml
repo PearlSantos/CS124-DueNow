@@ -14,7 +14,7 @@
             android:id="@+id/taskname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/headline"
+            android:textSize="@dimen/subheading3"
             android:textColor="#000000"
             android:text="@string/task_name"/>
         <LinearLayout
@@ -24,12 +24,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/subheading3"
+                android:textSize="@dimen/subheading2"
                 android:text="@string/starting_time"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/subheading3"
+                android:textSize="@dimen/subheading2"
                 android:id="@+id/starting_date"
                 android:textColor="@color/colorPrimaryGreen"
                 android:paddingLeft="@dimen/textPadding"
@@ -43,7 +43,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/subheading3"
+                android:textSize="@dimen/subheading2"
                 android:text="@string/deadline"/>
             <TextView
                 android:id="@+id/deadline"
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/textPadding"
                 android:textColor="@color/colorPrimaryRed"
-                android:textSize="@dimen/subheading3"
+                android:textSize="@dimen/subheading2"
                 android:text="@string/task_name"/>
         </LinearLayout>
 
