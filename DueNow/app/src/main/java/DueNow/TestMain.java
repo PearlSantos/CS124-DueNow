@@ -21,6 +21,7 @@ public class TestMain {
         Task t = f.createTask("Homework", 10);
         Calendar deadline = new GregorianCalendar();
         deadline.set(2016, 4, 1, 15, 30);
+        t = new EasyDifficulty(t);
         t.setName("Homework in Th131");
         t.setDescription("MUST do to get an A+++");
         t.setDeadline(deadline);
@@ -31,6 +32,7 @@ public class TestMain {
         Task t2 = f.createTask("Quiz", 10);
         Calendar deadline2 = new GregorianCalendar();
         deadline2.set(2016, 4, 3, 13, 30);
+        t2 = new MedDifficulty(t2);
         t2.setName("Quiz in CS124");
         t2.setDescription("MUST do to get an A+++");
         t2.setDeadline(deadline2);
@@ -40,6 +42,7 @@ public class TestMain {
         Task t3 = f.createTask("Orals", 10);
         Calendar deadline3 = new GregorianCalendar();
         deadline3.set(2016, 4, 2, 13, 30);
+        t3 = new HardDifficulty(t3);
         t3.setName("Philo orals");
         t3.setDescription("MUST do to get an A+++");
         t3.setDeadline(deadline3);
@@ -49,6 +52,7 @@ public class TestMain {
         Task t4 = f.createTask("LongTest", 10);
         Calendar deadline4 = new GregorianCalendar();
         deadline4.set(2016, 4, 1, 20, 30);
+        t4 = new HardDifficulty(t4);
         t4.setName("Long Test in CS162");
         t4.setDescription("MUST do to get an A+++");
         t4.setDeadline(deadline4);
@@ -62,13 +66,6 @@ public class TestMain {
             System.out.println("Recommended Start Time " + sdf.format(h.getRecommendedStartTime().getTime()));
             System.out.println("Recommended Finish Time " + sdf.format(h.getRecommendedTimeFinish().getTime()));
         }
-//
-//        t = new EasyDifficulty(t);
-//        System.out.println(t.getTimeNeeded());
-//        t = new MedDifficulty(t);
-//        System.out.println(t.getTimeNeeded());
-//        t = new HardDifficulty(t);
-//        System.out.println(t.getTimeNeeded());
 
     }
 }
