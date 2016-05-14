@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="duenow.decoratorfactory" >
+    package="duenow.decoratorfactory">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,10 +9,9 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <uses-permission android:name="android.permission.INTERNET" />
-
-        <activity
+        <meta-data
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
@@ -30,7 +29,7 @@
         <activity
             android:name="duenow.main.MainActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustPan" >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,8 +38,7 @@
         </activity>
         <activity
             android:name="duenow.main.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>

@@ -13,7 +13,7 @@ public class HardDifficulty extends TaskDecorator {
     }
     @Override
     public int getTimeNeeded() {
-        int addTime = task.getTimeNeeded() + (int) (task.getTimeNeeded()*0.50);
+        int addTime = task.getTimeNeeded() + (int) (task.getTimeNeeded()*0.20);
         return addTime;
     }
 }

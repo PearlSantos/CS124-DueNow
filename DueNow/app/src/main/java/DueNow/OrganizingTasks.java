@@ -38,26 +38,45 @@ public class OrganizingTasks {
             int indexOfList = 0;
             while (indexOfList < list.size()) {
                 Task analyzeNow = list.get(indexOfList);
+                Task prev = null;
+                if(indexOfList > 0){
+                    prev = list.get(indexOfList-1);
+                }
                 if (getIntervalToDeadline(analyzeNow, currTime) > getIntervalToDeadline(newTask, currTime)) {
-                    newList.add(setRecStartTime(analyzeNow, newTask));
+                    if(prev!= null) {
+                        newList.add(setRecStartTime(prev, newTask));
+                        //   System.out.println("Interval Prev Task:" + analyzeNow.getName());
+                    } else{
+                        newList.add(setRecStartTimeFirst(newTask, currTime));
+                    }
                     adjustRecTime(newList, indexOfList);
+                    break;
                 } else if (getIntervalToDeadline(analyzeNow, currTime) == getIntervalToDeadline(newTask, currTime)) {
                     if (analyzeNow.getPriority() > newTask.getPriority()) {
-                        newList.add(setRecStartTime(analyzeNow, newTask));
+                        if(prev!=null) {
+                            newList.add(setRecStartTime(prev, newTask));
+                        } else{
+                            newList.add(setRecStartTimeFirst(newTask, currTime));
+                        }
+                       // System.out.println("Priority Prev Task:" + analyzeNow.getName());
                         adjustRecTime(newList, indexOfList);
                     } else {
+                        newList.add(analyzeNow);
                         newList.add(setRecStartTime(analyzeNow, newTask));
+                     //   System.out.println("Priority No Change Prev Task:" + analyzeNow.getName());
                         indexOfList++;
                         adjustRecTime(newList, indexOfList);
                     }
                     break;
                 } else {
+                    System.out.println("Continued looping");
                     newList.add(analyzeNow);
                     indexOfList++;
                 }
             }
             //if add to last index
             if(listSize == newList.size()){
+                System.out.println("ADD to LAST");
                 newList.add(setRecStartTime(newList.get(newList.size()-1), newTask));
             }
         }
@@ -67,6 +86,9 @@ public class OrganizingTasks {
     }
 
     public void adjustRecTime(ArrayList<Task> newList, int indexStart) {
+        Task newTask = newList.get(newList.size()-1);
+        newList.add(setRecStartTime(newTask, list.get(indexStart)));
+        indexStart++;
         while (indexStart < list.size()) {
             Task prevTask;
             Task nowTask;
@@ -77,11 +99,19 @@ public class OrganizingTasks {
                 prevTask = newList.get(0);
                 nowTask = list.get(0);
             }
+          //  System.out.println("Adjusting Prev Task:" + nowTask.getName());
             newList.add(setRecStartTime(prevTask, nowTask));
             indexStart++;
         }
     }
 
+    public Task setRecStartTimeFirst(Task nowTask, Calendar currTime){
+        Calendar recStartTime = (Calendar) currTime.clone();
+        recStartTime.add(Calendar.MINUTE, REST_TIME);
+        nowTask.setRecommendedStartTime(recStartTime);
+        nowTask.setRecommendedTimeFinish();
+        return nowTask;
+    }
     public Task setRecStartTime(Task analyzeNow, Task nowTask){
         Calendar recStartTime = (Calendar) analyzeNow.getRecommendedTimeFinish().clone();
         recStartTime.add(Calendar.MINUTE, REST_TIME);
@@ -91,10 +121,10 @@ public class OrganizingTasks {
     }
 
     public int getIntervalToDeadline(Task t, Calendar currTime) {
-        //System.out.println("Deadline: " + dateFormat.format(t.deadline.getTime()));
         long milli = t.getDeadline().getTime().getTime() - currTime.getTime().getTime();
       //  long milli = currTime.getTime().getTime() - currTime.getTime().getTime();
         int hour = (int) milli / (60 * 60 * 1000) % 24;
+        System.out.println("TASK: " + t.getName() + " HOUR: " + hour);
         return hour;
     }
 

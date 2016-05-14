@@ -1,6 +1,16 @@
 package duenow;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+
 import java.util.Calendar;
+import java.util.Observable;
+import java.util.Observer;
 
 import duenow.state.NotStartedState;
 import duenow.state.State;
@@ -8,7 +18,8 @@ import duenow.state.State;
 /**
  * Created by elysi on 3/30/2016.
  */
-public class Task {
+public class Task implements Observer {
+    protected Context c;
     protected String name; // given by user
     protected String description; //given by user
     protected Calendar deadline; //given by user
@@ -22,6 +33,11 @@ public class Task {
     protected State state = new NotStartedState(this);
 
     // don't forget to wrap in difficulty!
+    // don't forget to set context!
+
+    public void setC(Context c) {
+        this.c = c;
+    }
 
     public String getName() {
         return name;
@@ -109,5 +125,30 @@ public class Task {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        Intent start = new Intent();
+        start.setAction("START");
+        Bundle startBundle = new Bundle();
+        startBundle.putString("time", "format time");
+        start.putExtras(startBundle);
+        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(c, (int) System.currentTimeMillis(), start, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Action.Builder s = new NotificationCompat.Action.Builder(android.R.drawable.ic_dialog_email, "Start", pendingIntentStart);
+        NotificationCompat.Builder n = new NotificationCompat.Builder(c)
+                .setContentTitle("New mail from " + "test@gmail.com")
+                .setContentText("Subject")
+                .setSmallIcon(android.R.drawable.ic_menu_mapmode)
+                .setAutoCancel(true)
+                .addAction(s.build())
+                .setPriority(Notification.PRIORITY_MAX)
+                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                .setWhen(recommendedStartTime.getTimeInMillis());
+
+        NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify((int)System.currentTimeMillis(), n.build());
     }
 }

@@ -13,7 +13,7 @@ public class MedDifficulty extends TaskDecorator {
     }
     @Override
     public int getTimeNeeded() {
-        int addTime = task.getTimeNeeded() + (int) (task.getTimeNeeded()*0.30);
+        int addTime = task.getTimeNeeded();
         return addTime;
     }
 }
