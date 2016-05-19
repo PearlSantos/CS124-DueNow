@@ -1,5 +1,7 @@
 package duenow.decoratorfactory;
 
+import com.firebase.client.Firebase;
+
 import duenow.Task;
 import duenow.decoratorfactory.tasktype.Homework;
 import duenow.decoratorfactory.tasktype.LongTest;
@@ -14,23 +16,30 @@ import duenow.decoratorfactory.tasktype.Reading;
  * Created by elysi on 4/1/2016.
  */
 public class TaskSimpleFactory {
+
     public Task createTask(String type, int tN){ //tN is in minutes
+        Task t = null;
         if(type.equals("Homework")){
-            return new Homework();
+            t = new Homework();
         } else if(type.equals("Long Test")){
-            return new LongTest();
+            t = new LongTest();
         } else if(type.equals("Orals")){
-            return new Orals();
+            t = new Orals();
         } else if(type.equals("Paper")){
-            return new Paper();
+            t = new Paper();
         } else if(type.equals("Project")){
-            return new Project();
+            t = new Project();
         } else if(type.equals("Quiz")){
-            return new Quiz();
+            t = new Quiz();
         } else if(type.equals("Reading")){
-            return new Reading();
+            t = new Reading();
         } else{
-            return new Other(tN);
+//            Task other = new Other(tN);
+//            return other.Builder();
+            t = new Other(tN);
         }
+        final Firebase ref = new Firebase("https://cs124duenow.firebaseio.com/tasks");
+        ref.child(t.uniqueId).setValue(t);
+        return t;
     }
 }

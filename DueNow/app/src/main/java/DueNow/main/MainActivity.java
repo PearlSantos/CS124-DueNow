@@ -29,7 +29,11 @@ public class MainActivity extends AppCompatActivity {
 
     FlyOutContainer root;
     final String[] options = {"Tasks", "Postponed Tasks", "Finished Tasks", "Account Settings", "Logout"};
-    final Integer[] imgID = {R.mipmap.ic_view_list_black_24dp, R.mipmap.ic_watch_later_black_24dp, R.mipmap.ic_check_black_24dp, R.mipmap.ic_account_box_black_24dp ,R.mipmap.ic_exit_to_app_black_24dp};
+    final Integer[] imgID = {R.mipmap.ic_view_list_black_24dp,
+            R.mipmap.ic_watch_later_black_24dp,
+            R.mipmap.ic_check_black_24dp,
+            R.mipmap.ic_account_box_black_24dp ,
+            R.mipmap.ic_exit_to_app_black_24dp};
     ListView list;
 
 

@@ -1,33 +1,37 @@
 package duenow;
 
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import duenow.decoratorfactory.R;
 import duenow.decoratorfactory.TaskSimpleFactory;
 import duenow.decoratorfactory.difficulty.EasyDifficulty;
 import duenow.decoratorfactory.difficulty.HardDifficulty;
 import duenow.decoratorfactory.difficulty.MedDifficulty;
+import duenow.decoratorfactory.tasktype.Homework;
 
 /**
  * Created by elysi on 4/16/2016.
  */
-public class TestMain {
-    public static void main(String args[]){
+public class TestMain extends AppCompatActivity{
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.teststuff);
+    }
+
+    public static void main(String args[]) {
 
         final SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
         TaskSimpleFactory f = new TaskSimpleFactory();
-        Task t = f.createTask("Homework", 10);
-        Calendar deadline = new GregorianCalendar();
-        deadline.set(2016, 4, 1, 15, 30);
-        t = new EasyDifficulty(t);
-        t.setName("Homework in Th131");
-        t.setDescription("MUST do to get an A+++");
-        t.setDeadline(deadline);
-        t.setPriority(3);
         OrganizingTasks o = new OrganizingTasks();
-        o.addTask(t);
+
 
         Task t2 = f.createTask("Quiz", 10);
         Calendar deadline2 = new GregorianCalendar();
@@ -60,7 +64,7 @@ public class TestMain {
         o.addTask(t4);
 
         ArrayList<Task> list = o.getList();
-        for(Task h: list){
+        for (Task h : list) {
             System.out.println("Name: " + h.getName());
             System.out.println("Deadline: " + sdf.format(h.getDeadline().getTime()));
             System.out.println("Recommended Start Time " + sdf.format(h.getRecommendedStartTime().getTime()));
