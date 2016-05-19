@@ -1,23 +1,35 @@
 package duenow.main;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 
 import duenow.decoratorfactory.R;
+//import duenow.viewgroup.SpinnerDialog;
 
 public class AddTaskFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    public Spinner sp;
+    final String PREFS = "CHOICE";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -63,13 +75,78 @@ public class AddTaskFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.layout_new_task, container, false);
-        ArrayList<String> task_types = new ArrayList<>();
-        
+		
+		
+		
+		
+        final ArrayList<String> task_types = new ArrayList<>();
+        task_types.add("Quiz");
+        task_types.add("Paper");
+        task_types.add("Long Test");
+        task_types.add("Custom");
 
         LinearLayout taskType = (LinearLayout) rootView.findViewById(R.id.task_type);
         taskType.setClickable(true);
+        taskType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.task_type_spinner);
+
+                final SharedPreferences prefs = getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+                sp = (Spinner) dialog.findViewById(R.id.spinner);
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, task_types);
+                sp.setAdapter(adapter);
+
+                sp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                    @Override
+                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                        String choice = (String) parent.getItemAtPosition(position);
+                        if (choice.equals("Custom")) {
+                            final Dialog dialog2 = new Dialog(getActivity());
+                            dialog2.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            dialog2.setContentView(R.layout.layout_custom_task_type);
+
+                            final Button done = (Button) dialog2.findViewById(R.id.ok);
+                            done.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    final EditText customTaskType = (EditText) dialog2.findViewById(R.id.custom_task_type);
+                                    String newTaskType = customTaskType.getText().toString();
+                                    SharedPreferences prefs = getActivity().getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+                                    SharedPreferences.Editor ed = prefs.edit();
+                                    ed.putString("choice", newTaskType);
+                                    ed.commit();
+                                    dialog2.dismiss();
+                                }
+                            });
+
+                            dialog2.show();
+                            dialog.dismiss();
+
+                        } else {
+                            SharedPreferences.Editor ed = prefs.edit();
+                            ed.putString("choice", choice);
+                            ed.commit();
+                            dialog.dismiss();
+                        }
 
 
+                    }
+
+                    @Override
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        dialog.dismiss();
+                        //close dialog fragment
+                    }
+
+
+                });
+
+            }
+        });
         return rootView;
     }
 

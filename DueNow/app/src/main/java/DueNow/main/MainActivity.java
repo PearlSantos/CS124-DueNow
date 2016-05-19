@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -41,26 +42,45 @@ public class MainActivity extends AppCompatActivity {
         list = (ListView) root.findViewById(R.id.menu);
 		list.setAdapter(new CustomList(this, options, imgID));
         list.setOnItemClickListener(new DrawerItemClickListener());
-//        list.setAdapter(new ArrayAdapter<String>(this, R.layout.dummy_item, options));
-//        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_frame, new TaskListFragment()).commit();
+		
+//		Button save = (Button) root.findViewById(R.id.saveButton);
+//		save.setVisibility(View.GONE);
 
         final ImageButton FAB = (ImageButton) root.findViewById(R.id.fabButton);
         FAB.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                FAB.setVisibility(View.GONE);
+				launchAddTask();
+                /* FAB.setVisibility(View.GONE);
+				save.setVisibility(View.VISIBLE);
+				
+				ImageButton back = (ImageButton) root.findViewById(R.id.menuButton);
+				//back.setImageResource(); --> should be the back button or something
+				back.setOnClickListener(new View.OnClickListener(){
+					@Override
+					public void onClick(View v) {
+						FragmentManager fragmentManager = getSupportFragmentManager();
+						fragmentManager.beginTransaction().replace(R.id.content_frame, new TaskListFragment()).commit();
+					}
+				});
+				
                 TextView title = (TextView) root.findViewById(R.id.appTitle);
                 title.setText("");
                 FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, new AddTaskFragment()).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, new AddTaskFragment()).commit(); */
             }
         });
 
         setContentView(root);
 		
 		
+    }
+
+    public void launchAddTask(){
+        Intent i = new Intent(this, AddTaskActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -88,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
 	 private class DrawerItemClickListener implements ListView.OnItemClickListener {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                TextViewPlus text = (TextViewPlus) view.findViewById(R.id.menu_item);
-//                text.setBackgroundColor(Color.parseColor(getResources().getString(R.string.backgroundGray)));
                 selectItem(position);
             }
         }

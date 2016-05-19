@@ -11,34 +11,40 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <uses-permission android:name="android.permission.INTERNET" />
-        <meta-data
-            android:name="com.facebook.FacebookActivity"
-            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-            android:label="@string/app_name" />
+        <!--<meta-data-->
+            <!--android:name="com.facebook.FacebookActivity"-->
+            <!--android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
+            <!--android:label="@string/app_name" />-->
 
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
-        <meta-data
-            android:name="com.firebase.ui.TwitterKey"
-            android:value="@string/twitter_app_key" />
-        <meta-data
-            android:name="com.firebase.ui.TwitterSecret"
-            android:value="@string/twitter_app_secret" />
+        <!--<meta-data-->
+            <!--android:name="com.facebook.sdk.ApplicationId"-->
+            <!--android:value="@string/facebook_app_id" />-->
+        <!--<meta-data-->
+            <!--android:name="com.firebase.ui.TwitterKey"-->
+            <!--android:value="@string/twitter_app_key" />-->
+        <!--<meta-data-->
+            <!--android:name="com.firebase.ui.TwitterSecret"-->
+            <!--android:value="@string/twitter_app_secret" />-->
 
         <activity
             android:name="duenow.main.MainActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+			android:parentActivityName="duenow.main.AddTaskActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+		<activity
+            android:name="duenow.main.AddTaskActivity"
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustPan"
+			android:parentActivityName="duenow.main.MainActivity"></activity>
         <activity
             android:name="duenow.main.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/app_name"></activity>
     </application>
 
 </manifest>

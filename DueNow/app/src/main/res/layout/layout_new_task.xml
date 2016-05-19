@@ -7,11 +7,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <!--<android.support.v7.widget.Toolbar-->
-            <!--android:id="@+id/newTaskToolbar"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="56dp"-->
-            <!--android:background="@color/colorPrimaryGreen"/>-->
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/newTaskToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/colorPrimaryGreen">
+			<ImageButton
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:background="@android:color/transparent"
+				android:onClick="endActivity"
+                android:src="@mipmap/ic_menu_white_24dp"/> <!--remember to change this into a back button-->
+
+            <TextView
+                android:id="@+id/appTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tasks"
+                android:textSize="@dimen/headline"
+                android:layout_marginLeft="@dimen/icon_size2"
+                android:textColor="#FFFFFF" />
+				
+			<Button
+                android:id="@+id/saveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="@android:color/transparent"
+				android:text="SAVE"
+				android:textColor="@color/white"/>
+
+        </android.support.v7.widget.Toolbar>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,6 +87,8 @@
 
 
         </LinearLayout>
+
+
 
         <LinearLayout
 
