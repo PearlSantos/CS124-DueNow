@@ -9,11 +9,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.client.Firebase;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
@@ -26,6 +29,8 @@ import duenow.state.State;
  * Created by elysi on 3/30/2016.
  */
 public class Task implements Observer {
+    private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
+
     public final String uniqueId = Integer.toString((int) System.currentTimeMillis());
     protected Context c;
     protected String name; // given by user
@@ -39,16 +44,12 @@ public class Task implements Observer {
     protected int timeInterval = 0; // in minutes, total time user worked on task
     protected int timeNeeded; // timeNeeded is in minutes
     protected State state = new NotStartedState(this);
+//    private void updateFirebase(String key, Object value){
+//        placeholder.clear();
+//        placeholder.put(key, value);
+//        specTask.updateChildren(placeholder);
+//    }
 
-    protected final Firebase ref = new Firebase("https://cs124duenow.firebaseio.com/tasks");
-    Map<String, Object> placeholder = new HashMap<String, Object>();
-    protected final Firebase specTask = ref.child(uniqueId);
-
-    private void updateFirebase(String key, Object value){
-        placeholder.clear();
-        placeholder.put(key, value);
-        specTask.updateChildren(placeholder);
-    }
 
 //    private Task(Builder builder) {
 //        this.c = builder.c;
@@ -99,72 +100,58 @@ public class Task implements Observer {
 //    }
 
     public void setC(Context c) {
-        updateFirebase("c", c);
         this.c = c;
     }
 
     public String getName() {
-        updateFirebase("name", name);
         return name;
     }
 
     public void setName(String name) {
-        updateFirebase("name", name);
         this.name = name;
     }
 
     public String getDescription() {
-        updateFirebase("description", description);
         return description;
     }
 
     public void setDescription(String description) {
-        updateFirebase("name", description);
         this.description = description;
     }
 
     public Calendar getDeadline() {
-        updateFirebase("deadline", deadline);
         return deadline;
     }
 
     public void setDeadline(Calendar deadline) {
-        updateFirebase("deadline", deadline);
         this.deadline = deadline;
     }
 
     public Calendar getTimeStarted() {
-        updateFirebase("timeStarted", timeStarted);
         return timeStarted;
     }
 
     public void setTimeStarted(Calendar timeStarted) {
-        updateFirebase("timeStarted", timeStarted);
         this.timeStarted = timeStarted;
     }
 
     public Calendar getTimeFinished() {
-        updateFirebase("timeFinished", timeFinished);
         return timeFinished;
     }
 
     public void setTimeFinished(Calendar timeFinished) {
-        updateFirebase("timeFinished", timeFinished);
         this.timeFinished = timeFinished;
     }
 
     public Calendar getRecommendedStartTime() {
-        updateFirebase("recommendedStartTime", recommendedStartTime);
         return recommendedStartTime;
     }
 
     public void setRecommendedStartTime(Calendar recommendedStartTime) {
-        updateFirebase("recommendedStartTime", recommendedStartTime);
         this.recommendedStartTime = recommendedStartTime;
     }
 
     public Calendar getRecommendedTimeFinish() {
-        updateFirebase("recommendedTimeFinish", recommendedTimeFinish);
         return recommendedTimeFinish;
     }
 
@@ -172,54 +159,51 @@ public class Task implements Observer {
         Calendar cal = (Calendar) recommendedStartTime.clone();
         cal.add(Calendar.MINUTE, timeNeeded);
         this.recommendedTimeFinish = cal;
-        updateFirebase("recommendedTimeFinish", recommendedTimeFinish);
     }
 
     public int getTimeInterval() {
-        updateFirebase("timeInterval", timeInterval);
         return timeInterval;
     }
 
     public void setTimeInterval(int timeInterval) {
-        updateFirebase("timeInterval", timeInterval);
         this.timeInterval = timeInterval;
     }
 
     public int getTimeNeeded(){
-        updateFirebase("timeNeeded", timeNeeded);
         return this.timeNeeded;
     }
 
     public void setTimeNeeded(int timeNeeded){
-        updateFirebase("timeNeeded", timeNeeded);
         this.timeNeeded = timeNeeded;}
 
     public State getState() {
-        updateFirebase("state", getState());
         return state;
     }
 
     public void setState(State state) {
-        updateFirebase("state", state);
         this.state = state;
     }
 
     public int getPriority() {
-        updateFirebase("priority", priority);
         return priority;
     }
 
     public void setPriority(int priority) {
-        updateFirebase("priority", priority);
         this.priority = priority;
     }
 
     @Override
     public void update(Observable observable, Object data) {
+        int id =  (int) System.currentTimeMillis();
+
         Intent intent = new Intent(c, NotificationMaker.class);
-       // intent.putExtra("TASK", testT);
-        PendingIntent pe = PendingIntent.getBroadcast(c, 123, intent, 0);
-        AlarmManager alarmManager = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
+        intent.putExtra("ID", id);
+        //     intent.putExtra("TASK", testT);
+
+        PendingIntent pe = PendingIntent.getBroadcast(c, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, recommendedStartTime.getTimeInMillis(), pe);
+
+        System.out.println("CHECK: ALARM MANAGER");
     }
 }

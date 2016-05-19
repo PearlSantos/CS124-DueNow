@@ -1,6 +1,9 @@
 package duenow.decoratorfactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.client.Firebase;
+
+import java.util.Map;
 
 import duenow.Task;
 import duenow.decoratorfactory.tasktype.Homework;
@@ -38,8 +41,6 @@ public class TaskSimpleFactory {
 //            return other.Builder();
             t = new Other(tN);
         }
-        final Firebase ref = new Firebase("https://cs124duenow.firebaseio.com/tasks");
-        ref.child(t.uniqueId).setValue(t);
         return t;
     }
 }

@@ -3,6 +3,7 @@ package duenow.state;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import duenow.ListOfTasks;
 import duenow.OrganizingTasks;
 import duenow.Task;
 
@@ -27,7 +28,7 @@ public class StartedState extends State {
         //recompute rec start time
         OrganizingTasks organizing = new OrganizingTasks();
         organizing.postpone(t);
-        message += f.format(t.getRecommendedStartTime());
+        message += f.format(t.getRecommendedStartTime().getTime());
 
         // decrease time needed
         Calendar currTime = Calendar.getInstance();
@@ -39,6 +40,8 @@ public class StartedState extends State {
         t.setTimeInterval(t.getTimeInterval() + mins);
 
         t.setState(new PostponedState(t));
+
+        ListOfTasks.updateFirebase(t);
 
     }
 
@@ -57,5 +60,7 @@ public class StartedState extends State {
         t.setTimeInterval(t.getTimeInterval() + mins);
 
         t.setState(new FinishedState());
+
+        ListOfTasks.updateFirebase(t);
     }
 }

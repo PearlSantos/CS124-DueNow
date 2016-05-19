@@ -7,15 +7,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
-import java.text.ParseException;
+import com.firebase.client.Firebase;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import duenow.Task;
+import duenow.decoratorfactory.R;
 
 /**
  * Created by elysi on 5/5/2016.
@@ -27,6 +27,8 @@ public class NotificationMaker extends BroadcastReceiver {
     final static String POST = "POSTPONED";
     public void onReceive(Context context, Intent intent) {
      //   Task t = (Task) intent.getSerializableExtra("TASK");
+        Firebase.setAndroidContext(context);
+
         System.out.println("CHECK: NOTIFICATION MAKER");
         Task t = new Task();
         t.setName("CS124 Project");
@@ -37,28 +39,30 @@ public class NotificationMaker extends BroadcastReceiver {
         int id =  intent.getIntExtra("ID", 0);
         String deadlineString = f.format(t.getDeadline().getTime());
 
-        Intent i = new Intent(context, NotificationReceiver.class);
-        i.putExtra("ID", id);
-      //  i.putExtra("TASK", t);
+        Intent start = new Intent(context, NotificationReceiver.class);
+        Intent fin = new Intent(context, NotificationReceiver.class);
+        Intent post = new Intent(context, NotificationReceiver.class);
 
+        start.putExtra("ID", id);
+        fin.putExtra("ID", id);
+        post.putExtra("ID", id);
 
+        start.setAction(START);
+        fin.setAction(FIN);
+        post.setAction(POST);
 
-        i.setAction(START);
+        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(context, id, start, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentFin = PendingIntent.getBroadcast(context, id, fin, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentPost = PendingIntent.getBroadcast(context, id, post, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        i.setAction(FIN);
-
-        i.setAction(POST);
-
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, i, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        NotificationCompat.Action.Builder s = new NotificationCompat.Action.Builder(android.R.drawable.ic_dialog_email, "Start", pendingIntent);
-        NotificationCompat.Action.Builder f = new NotificationCompat.Action.Builder(android.R.drawable.ic_btn_speak_now, "Finish", pendingIntent);
-        NotificationCompat.Action.Builder p = new NotificationCompat.Action.Builder(android.R.drawable.ic_dialog_dialer, "Postpone", pendingIntent);
+        NotificationCompat.Action.Builder s = new NotificationCompat.Action.Builder(R.mipmap.ic_assignment_white_24dp, "Start", pendingIntentStart);
+        NotificationCompat.Action.Builder f = new NotificationCompat.Action.Builder(R.mipmap.ic_done_white_24dp, "Finish", pendingIntentFin);
+        NotificationCompat.Action.Builder p = new NotificationCompat.Action.Builder(R.mipmap.ic_pan_tool_white_24dp, "Postpone", pendingIntentPost);
         NotificationCompat.Builder n = new NotificationCompat.Builder(context)
                 .setContentTitle("Due Now")
                 .setContentText(t.getName() + "\n")
                 .setContentInfo("Deadline: " + deadlineString)
-                .setSmallIcon(android.R.drawable.ic_menu_mapmode)
+                .setSmallIcon(R.drawable.logocircle)
                 .setAutoCancel(true)
                 .addAction(s.build())
                 .addAction(f.build())

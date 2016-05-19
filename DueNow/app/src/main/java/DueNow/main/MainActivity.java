@@ -2,9 +2,11 @@ package duenow.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,6 +28,7 @@ import duenow.decoratorfactory.R;
 import duenow.viewgroup.FlyOutContainer;
 
 public class MainActivity extends AppCompatActivity {
+    public static final Firebase ref = new Firebase("https://cs124duenow.firebaseio.com/tasks");
 
     FlyOutContainer root;
     final String[] options = {"Tasks", "Postponed Tasks", "Finished Tasks", "Account Settings", "Logout"};
@@ -41,6 +44,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
+
+        if(!getIntent().getStringExtra("MESSAGE").isEmpty()) {
+            AlertDialog.Builder inform = new AlertDialog.Builder(this)
+            .setMessage(getIntent().getStringExtra("MESSAGE"))
+            .setTitle("Task has been " + getIntent().getAction())
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            dialog.dismiss();
+                        }
+                    });
+            inform.create().show();
+        }
+
         this.root = (FlyOutContainer) this.getLayoutInflater().inflate(R.layout.activity_main, null);
         list = (ListView) root.findViewById(R.id.menu);
 		list.setAdapter(new CustomList(this, options, imgID));
