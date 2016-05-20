@@ -12,12 +12,12 @@ import duenow.decoratorfactory.tasktype.SchoolTask;
 public class PersonalTaskFactory extends AbstractTaskFactory {
 
     @Override
-    SchoolTask createSchoolTask(String type, int tn) {
+    public SchoolTask createSchoolTask(String type, int tn) {
         return null;
     }
 
     @Override
-    PersonalTask createPersonalTask(String type, int tn) {
+    public PersonalTask createPersonalTask(String type, int tn) {
         PersonalTask pt;
         switch (type){
             case "Dinner":

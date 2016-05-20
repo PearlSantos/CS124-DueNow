@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 import duenow.ListOfTasks;
 import duenow.Task;
+import duenow.decoratorfactory.AbstractTaskFactory;
+import duenow.decoratorfactory.FactoryProducer;
 import duenow.decoratorfactory.R;
 
 public class AddTaskFragment extends Fragment {
@@ -75,18 +77,21 @@ public class AddTaskFragment extends Fragment {
         Spinner d = (Spinner) rootView.findViewById(R.id.difficulty);
         d.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, diff));
 
+                ((Button) rootView.findViewById(R.id.testSave)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AbstractTaskFactory fp = FactoryProducer.getFactory("School");
+                        Task t = fp.createSchoolTask("Homework", 0);
 
-        ((Button) rootView.findViewById(R.id.testSave)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                EditText taskName = (EditText) rootView.findViewById(R.id.taskName);
-                EditText taskDescription = (EditText) rootView.findViewById(R.id.taskName);
-            }
-        });
+                        EditText taskName = (EditText) rootView.findViewById(R.id.taskName);
+                        EditText taskDescription = (EditText) rootView.findViewById(R.id.taskName);
+                        ListOfTasks l = new ListOfTasks();
+                        l.updateFirebase(t);
+
+                    }
+                });
 
 
-        ListOfTasks l = new ListOfTasks();
-       // l.updateFirebase(t);
 
         return rootView;
 
