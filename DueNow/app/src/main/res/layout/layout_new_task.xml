@@ -39,7 +39,8 @@
                     android:layout_height="wrap_content"
                     android:text="Project Priorities"
                     android:textColor="#FFFFFF"
-                    android:textSize="@dimen/headline2"/>
+                    android:textSize="@dimen/headline2"
+                    android:id="@+id/taskName" />
 
                 <EditText
                     android:layout_width="match_parent"
@@ -55,7 +56,12 @@
 
             </LinearLayout>
 
-
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="testSave"
+                android:id="@+id/testSave" />
 
 
         </LinearLayout>
@@ -134,7 +140,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/subheading4"
-                        android:id="@+id/dueDate"
+                        android:id="@+id/deadline"
                         android:text="February 20, 2014"/>
                 </LinearLayout>
             </LinearLayout>
@@ -202,13 +208,18 @@
                         android:textColor="#000000"
                         android:textSize="@dimen/subheading4"
                         android:text="Difficulty"/>
-                    <TextView
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textSize="@dimen/subheading4"-->
+                        <!--android:id="@+id/difficulty" />-->
+
+                    <Spinner
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/subheading4"
-                        android:id="@+id/difficulty"
-                        android:text="1"/>
-            </LinearLayout>
+                        android:id="@+id/difficulty" />
+                </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>

@@ -14,6 +14,7 @@ public class StartedState extends State {
 
     private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
     public StartedState(Task task){
+        this.name = "StartedState";
         t = task;
     }
 
@@ -59,7 +60,7 @@ public class StartedState extends State {
         // set timeInterval
         t.setTimeInterval(t.getTimeInterval() + mins);
 
-        t.setState(new FinishedState());
+        t.setState(new FinishedState(t));
 
         ListOfTasks.updateFirebase(t);
     }

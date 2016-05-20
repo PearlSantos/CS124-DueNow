@@ -13,6 +13,7 @@ public class PostponedState extends State {
     private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
 
     public PostponedState(Task task){
+        this.name = "PostponedState";
         t = task;
     }
 
@@ -21,6 +22,7 @@ public class PostponedState extends State {
         message = "Starting task: ";
         Calendar start = Calendar.getInstance();
         message = "Originally Started: " + f.format(t.getTimeStarted().getTime()) + "\nTime Started: " + f.format(start.getTime());
+
         t.setTimeStarted(start);
         t.setState(new StartedState(t));
 

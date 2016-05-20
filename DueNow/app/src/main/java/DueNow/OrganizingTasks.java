@@ -86,7 +86,6 @@ public class OrganizingTasks {
         for(Task e: list){
             lot.updateFirebase(e);
         }
-        lot.notifyAll();
     }
 
     public void adjustRecTime(ArrayList<Task> newList, int indexStart) {

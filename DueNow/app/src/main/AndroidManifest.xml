@@ -32,6 +32,11 @@
             android:name="duenow.main.MainActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -42,12 +47,6 @@
 
         <activity android:name="duenow.notifications.NotifyUser"
             android:label="NotifyUser">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
 
         <receiver

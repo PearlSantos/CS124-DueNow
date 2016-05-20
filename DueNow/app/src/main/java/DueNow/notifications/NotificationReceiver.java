@@ -37,6 +37,7 @@ public class NotificationReceiver extends BroadcastReceiver {
         t.setDeadline(deadline3);
 
         State state = t.getState();
+        State prev = state;
         int id = intent.getIntExtra("ID", 0);
         String action = intent.getAction();
 
@@ -55,10 +56,11 @@ public class NotificationReceiver extends BroadcastReceiver {
             System.out.println("CHECK: Post");
         }
 
-
-        NotificationManager n = (NotificationManager)
-                context.getSystemService(Context.NOTIFICATION_SERVICE);
-        n.cancel(id);
+        if(!prev.getStateName().equals(t.getState().getStateName())) {
+            NotificationManager n = (NotificationManager)
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
+            n.cancel(id);
+        }
 
         Intent goToMain = new Intent(context, MainActivity.class);
         goToMain.setAction(action);

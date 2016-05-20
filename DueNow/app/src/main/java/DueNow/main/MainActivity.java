@@ -28,7 +28,6 @@ import duenow.decoratorfactory.R;
 import duenow.viewgroup.FlyOutContainer;
 
 public class MainActivity extends AppCompatActivity {
-    public static final Firebase ref = new Firebase("https://cs124duenow.firebaseio.com/tasks");
 
     FlyOutContainer root;
     final String[] options = {"Tasks", "Postponed Tasks", "Finished Tasks", "Account Settings", "Logout"};
@@ -45,10 +44,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
 
-        if(!getIntent().getStringExtra("MESSAGE").isEmpty()) {
+        String lol =  getIntent().getStringExtra("MESSAGE");
+        if(lol!=null) {
             AlertDialog.Builder inform = new AlertDialog.Builder(this)
             .setMessage(getIntent().getStringExtra("MESSAGE"))
-            .setTitle("Task has been " + getIntent().getAction())
+            .setTitle(getIntent().getAction() + " CLICKED")
                     .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             // if this button is clicked, close
@@ -127,11 +127,11 @@ public class MainActivity extends AppCompatActivity {
                     root.toggleMenu();
                     break;
                 case 1:
-                    fragment = new TaskListFragment(); //must be PostponedTasks
+                    fragment = new PostponedTasks(); //must be PostponedTasks
                     root.toggleMenu();
                     break;
                 case 2:
-                    fragment = new TaskListFragment(); //finished tasks
+                    fragment = new FinishedTasks(); //finished tasks
                     root.toggleMenu();
                     break;
                 case 3:

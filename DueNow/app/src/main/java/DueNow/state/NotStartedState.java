@@ -13,12 +13,14 @@ import duenow.Task;
 public class NotStartedState extends State {
     private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
     public NotStartedState(Task task){
+        this.name = "NotStartedState";
         t = task;
     }
     @Override
     public void startTask() {
         Calendar start = Calendar.getInstance();
         message = "Task Started:" + f.format(start.getTime());
+
         // activate start time
         t.setTimeStarted(start);
         t.setState(new StartedState(t));

@@ -7,7 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import duenow.ListOfTasks;
+import duenow.Task;
 import duenow.decoratorfactory.R;
 
 public class AddTaskFragment extends Fragment {
@@ -57,7 +66,30 @@ public class AddTaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.layout_new_task, container, false);
+        final View rootView = inflater.inflate(R.layout.layout_new_task, container, false);
+
+        ArrayList<String> diff = new ArrayList<String>();
+        diff.add("Easy");
+        diff.add("Medium");
+        diff.add("Difficult");
+        Spinner d = (Spinner) rootView.findViewById(R.id.difficulty);
+        d.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, diff));
+
+        
+        ((Button) rootView.findViewById(R.id.testSave)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText taskName = (EditText) rootView.findViewById(R.id.taskName);
+                EditText taskDescription = (EditText) rootView.findViewById(R.id.taskName);
+            }
+        });
+
+
+        ListOfTasks l = new ListOfTasks();
+        l.updateFirebase(t);
+
+        return rootView;
+
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

@@ -28,7 +28,7 @@ import duenow.state.State;
 /**
  * Created by elysi on 3/30/2016.
  */
-public class Task implements Observer {
+public class Task {
     private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
 
     public final String uniqueId = Integer.toString((int) System.currentTimeMillis());
@@ -149,6 +149,7 @@ public class Task implements Observer {
 
     public void setRecommendedStartTime(Calendar recommendedStartTime) {
         this.recommendedStartTime = recommendedStartTime;
+        setNotification();
     }
 
     public Calendar getRecommendedTimeFinish() {
@@ -192,8 +193,7 @@ public class Task implements Observer {
         this.priority = priority;
     }
 
-    @Override
-    public void update(Observable observable, Object data) {
+    public void setNotification() {
         int id =  (int) System.currentTimeMillis();
 
         Intent intent = new Intent(c, NotificationMaker.class);
@@ -202,6 +202,8 @@ public class Task implements Observer {
 
         PendingIntent pe = PendingIntent.getBroadcast(c, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pe);
+
         alarmManager.set(AlarmManager.RTC_WAKEUP, recommendedStartTime.getTimeInMillis(), pe);
 
         System.out.println("CHECK: ALARM MANAGER");
