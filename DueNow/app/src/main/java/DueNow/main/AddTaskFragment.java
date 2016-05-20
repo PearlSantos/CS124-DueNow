@@ -75,7 +75,7 @@ public class AddTaskFragment extends Fragment {
         Spinner d = (Spinner) rootView.findViewById(R.id.difficulty);
         d.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, diff));
 
-        
+
         ((Button) rootView.findViewById(R.id.testSave)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,7 +86,7 @@ public class AddTaskFragment extends Fragment {
 
 
         ListOfTasks l = new ListOfTasks();
-        l.updateFirebase(t);
+       // l.updateFirebase(t);
 
         return rootView;
 
@@ -124,7 +124,7 @@ public class AddTaskFragment extends Fragment {
 //     * <p/>
 //     * See the Android Training lesson <a href=
 //     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
+//     * >Communicating with OtherSchool Fragments</a> for more information.
 //     */
 //    public interface OnFragmentInteractionListener {
 //        // TODO: Update argument type and name

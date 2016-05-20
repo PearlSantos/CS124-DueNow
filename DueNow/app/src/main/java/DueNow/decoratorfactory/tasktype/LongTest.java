@@ -1,6 +1,5 @@
 package duenow.decoratorfactory.tasktype;
 
-import DueNow.decoratorfactory.tasktype.SchoolTask;
 import duenow.Task;
 
 /**

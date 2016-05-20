@@ -1,6 +1,16 @@
-package DueNow.decoratorfactory;
+package duenow.decoratorfactory;
 
-import DueNow.decoratorfactory.tasktype.*;
+
+import duenow.decoratorfactory.tasktype.Homework;
+import duenow.decoratorfactory.tasktype.LongTest;
+import duenow.decoratorfactory.tasktype.Orals;
+import duenow.decoratorfactory.tasktype.OtherSchool;
+import duenow.decoratorfactory.tasktype.Paper;
+import duenow.decoratorfactory.tasktype.PersonalTask;
+import duenow.decoratorfactory.tasktype.Project;
+import duenow.decoratorfactory.tasktype.Quiz;
+import duenow.decoratorfactory.tasktype.Reading;
+import duenow.decoratorfactory.tasktype.SchoolTask;
 
 /**
  * Created by IanDeLaCruz on 20/05/2016.
@@ -32,7 +42,7 @@ public class SchoolTaskFactory extends AbstractTaskFactory{
                 st = new Reading();
                 break;
             default:
-                st = new Other(tn);
+                st = new OtherSchool(tn);
         }
         return st;
     }

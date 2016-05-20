@@ -1,15 +1,10 @@
 package duenow.decoratorfactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.firebase.client.Firebase;
-
-import java.util.Map;
-
 import duenow.Task;
 import duenow.decoratorfactory.tasktype.Homework;
 import duenow.decoratorfactory.tasktype.LongTest;
 import duenow.decoratorfactory.tasktype.Orals;
-import duenow.decoratorfactory.tasktype.Other;
+import duenow.decoratorfactory.tasktype.OtherSchool;
 import duenow.decoratorfactory.tasktype.Paper;
 import duenow.decoratorfactory.tasktype.Project;
 import duenow.decoratorfactory.tasktype.Quiz;
@@ -37,9 +32,9 @@ public class TaskSimpleFactory {
         } else if(type.equals("Reading")){
             t = new Reading();
         } else{
-//            Task other = new Other(tN);
+//            Task other = new OtherSchool(tN);
 //            return other.Builder();
-            t = new Other(tN);
+            t = new OtherSchool(tN);
         }
         return t;
     }

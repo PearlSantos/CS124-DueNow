@@ -1,4 +1,4 @@
-package DueNow.decoratorfactory.tasktype;
+package duenow.decoratorfactory.tasktype;
 
 /**
  * Created by IanDeLaCruz on 20/05/2016.

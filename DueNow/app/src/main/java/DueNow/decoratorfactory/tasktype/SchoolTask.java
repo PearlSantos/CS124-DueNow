@@ -1,4 +1,4 @@
-package DueNow.decoratorfactory.tasktype;
+package duenow.decoratorfactory.tasktype;
 
 import duenow.Task;
 

@@ -1,7 +1,10 @@
-package DueNow.decoratorfactory;
+package duenow.decoratorfactory;
 
-import DueNow.decoratorfactory.tasktype.PersonalTask;
-import DueNow.decoratorfactory.tasktype.SchoolTask;
+
+import duenow.decoratorfactory.tasktype.Dinner;
+import duenow.decoratorfactory.tasktype.OtherPersonal;
+import duenow.decoratorfactory.tasktype.PersonalTask;
+import duenow.decoratorfactory.tasktype.SchoolTask;
 
 /**
  * Created by IanDeLaCruz on 20/05/2016.
@@ -21,8 +24,9 @@ public class PersonalTaskFactory extends AbstractTaskFactory {
                 pt = new Dinner();
                 break;
             default:
-                pt = new Other(tn);
+                pt = new OtherPersonal(tn);
                 break;
         }
+        return pt;
     }
 }

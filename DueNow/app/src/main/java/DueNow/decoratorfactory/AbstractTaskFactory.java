@@ -1,7 +1,8 @@
-package DueNow.decoratorfactory;
+package duenow.decoratorfactory;
 
-import DueNow.decoratorfactory.tasktype.PersonalTask;
-import DueNow.decoratorfactory.tasktype.SchoolTask;
+
+import duenow.decoratorfactory.tasktype.PersonalTask;
+import duenow.decoratorfactory.tasktype.SchoolTask;
 
 /**
  * Created by IanDeLaCruz on 20/05/2016.

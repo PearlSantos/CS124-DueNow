@@ -1,4 +1,4 @@
-package DueNow.decoratorfactory;
+package duenow.decoratorfactory;
 
 /**
  * Created by IanDeLaCruz on 20/05/2016.
@@ -11,5 +11,6 @@ public class FactoryProducer {
             case "School":
                 return new SchoolTaskFactory();
         }
+        return null;
     }
 }
