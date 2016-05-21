@@ -44,60 +44,8 @@ public class Task {
     protected int timeInterval = 0; // in minutes, total time user worked on task
     protected int timeNeeded; // timeNeeded is in minutes
     protected State state = new NotStartedState(this);
-//    private void updateFirebase(String key, Object value){
-//        placeholder.clear();
-//        placeholder.put(key, value);
-//        specTask.updateChildren(placeholder);
-//    }
 
 
-//    private Task(Builder builder) {
-//        this.c = builder.c;
-//        this.name = builder.name;
-//        this.description = builder.description;
-//        this.deadline = builder.deadline;
-//        this.priority = builder.priority;
-//    }
-//
-//    public Task() {
-//    }
-//
-//    public static class Builder{
-//        protected Context c;
-//        protected String name; // given by user
-//        protected String description; //given by user
-//        protected Calendar deadline; //given by user
-//        protected int priority; // given by user
-//
-//        public Builder context(Context context){
-//            this.c = context;
-//            return this;
-//        }
-//
-//        public Builder name(String n){
-//            this.name = n;
-//            return this;
-//        }
-//
-//        public Builder description(String d){
-//            this.description = d;
-//            return this;
-//        }
-//
-//        public Builder deadline(Calendar cal){
-//            this.deadline = cal;
-//            return this;
-//        }
-//
-//        public Builder priority(int p){
-//            this.priority = p;
-//            return this;
-//        }
-//
-//        public Task build(){
-//            return new Task(this);
-//        }
-//    }
 
     public void setC(Context c) {
         this.c = c;

@@ -26,7 +26,9 @@ public class PostponedState extends State {
         t.setTimeStarted(start);
         t.setState(new StartedState(t));
 
-        ListOfTasks.updateFirebase(t);
+
+        ListOfTasks l = new ListOfTasks();
+        l.updateFirebase(t);
     }
 
     @Override

@@ -14,8 +14,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import duenow.ListOfTasks;
+import duenow.OrganizingTasks;
 import duenow.Task;
 import duenow.decoratorfactory.AbstractTaskFactory;
 import duenow.decoratorfactory.FactoryProducer;
@@ -85,6 +88,18 @@ public class AddTaskFragment extends Fragment {
 
                         EditText taskName = (EditText) rootView.findViewById(R.id.taskName);
                         EditText taskDescription = (EditText) rootView.findViewById(R.id.taskName);
+
+                        Calendar deadline3 = new GregorianCalendar();
+                        deadline3.set(2016, 4, 2, 13, 30);
+
+                        t.setDeadline(deadline3);
+                        t.setC(getContext());
+                        t.setName(taskName.getText().toString());
+                        t.setDescription(taskDescription.getText().toString());
+
+                       // OrganizingTasks o = new OrganizingTasks();
+                       // o.addTask(t);
+
                         ListOfTasks l = new ListOfTasks();
                         l.updateFirebase(t);
 

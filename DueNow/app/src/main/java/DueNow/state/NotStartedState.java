@@ -25,7 +25,9 @@ public class NotStartedState extends State {
         t.setTimeStarted(start);
         t.setState(new StartedState(t));
 
-        ListOfTasks.updateFirebase(t);
+        ListOfTasks l = new ListOfTasks();
+        l.updateFirebase(t);
+
     }
 
     @Override
@@ -37,7 +39,8 @@ public class NotStartedState extends State {
         message += f.format(t.getRecommendedStartTime().getTime());
         t.setState(new PostponedState(t));
 
-        ListOfTasks.updateFirebase(t);
+        ListOfTasks l = new ListOfTasks();
+        l.updateFirebase(t);
     }
 
     @Override

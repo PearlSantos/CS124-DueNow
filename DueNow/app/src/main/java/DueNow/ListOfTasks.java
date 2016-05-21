@@ -1,6 +1,5 @@
 package duenow;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.client.ChildEventListener;
@@ -10,19 +9,15 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Map;
 import java.util.Observable;
 
-import duenow.main.AddTaskFragment;
 import duenow.main.FinishedTasks;
-import duenow.main.MainActivity;
 import duenow.main.PostponedTasks;
 import duenow.main.TaskListFragment;
-// Firebase does not accept Calendar objects. You need to do some magic here. Calendar objects are strings
+import duenow.state.State;
 /**
  * Created by elysi on 4/30/2016.
  */
@@ -39,20 +34,34 @@ public class ListOfTasks extends Observable {
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
       //          Task task = snapshot.getValue(Task.class);
                 Map<String, Object> map = snapshot.getValue(Map.class);
-                String lol = "";
-                try {
-                    lol = new ObjectMapper().writeValueAsString(map);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("CHECK MAP" + map);
-                Task task = null;
-                try {
-                    task = new ObjectMapper().readValue(lol, new TypeReference<Task>(){});
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                // Task task = new ObjectMapper().convertValue(map, new TypeReference<Task>(){});
+//                String lol = "";
+//                try {
+//                    lol = new ObjectMapper().writeValueAsString(map);
+//                } catch (JsonProcessingException e) {
+//                    e.printStackTrace();
+//                }
+               System.out.println("CHECK: MAP" + map);
+//                Task task = null;
+//                try {
+//                    task = new ObjectMapper().readValue(lol, new TypeReference<Task>(){});
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+                Task task = new ObjectMapper().convertValue(map, Task.class);
+                System.out.println(snapshot.child("state").getValue());
+//                State s = null;
+//                try {
+//                    s = new ObjectMapper().readValue((String)snapshot.child("state").getValue(), new TypeReference<State>(){});
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                Task task = new Task();
+//                t.setName((String)map.get("name"));
+//                t.setDescription((String) map.get("description"));
+//                t.setPriority((int) map.get("priority"));
+//                t.setDeadline((Calendar) map.get("deadline"));
+
+
                 list.add(task);
             }
 
@@ -78,8 +87,10 @@ public class ListOfTasks extends Observable {
             // ....
         });
 
-        for(Task ta: list){
-            System.out.println(ta.getName());
+        if(!list.isEmpty()) {
+            for (Task ta : list) {
+                System.out.println(ta.getName());
+            }
         }
         return list;
     }
@@ -124,10 +135,18 @@ public class ListOfTasks extends Observable {
         this.addObserver(PostponedTasks.newInstance());
         this.addObserver(FinishedTasks.newInstance());
 
-        taskMap = new ObjectMapper().convertValue(t, Map.class);
-        specTask = ref.child(t.uniqueId);
-        specTask.setValue(taskMap);
+        ObjectMapper map = new ObjectMapper();
+        taskMap = map.convertValue(t, Map.class);
 
+//        try {
+//            taskMap.put("state", map.writeValueAsString(t.getState()));
+//        } catch (JsonProcessingException e) {
+//            e.printStackTrace();
+//        }
+        //  specTask = ref.child(t.uniqueId);
+       // specTask.setValue(taskMap);
+        ref.child(t.uniqueId).setValue(taskMap);
+        System.out.println("CHECK: SAVED TO FIREBASE");
         this.notifyObservers();
     }
 

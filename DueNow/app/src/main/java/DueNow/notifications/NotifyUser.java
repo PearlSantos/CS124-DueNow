@@ -53,7 +53,8 @@ public class NotifyUser extends AppCompatActivity {
         deadline3.set(2016, 4, 20, 13, 30);
         testT.setDeadline(deadline3);
 
-        ListOfTasks.updateFirebase(testT);
+        ListOfTasks l = new ListOfTasks();
+        l.updateFirebase(testT);
 
         Intent intent = new Intent(getBaseContext(), NotificationMaker.class);
         intent.putExtra("ID", id);

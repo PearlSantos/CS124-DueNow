@@ -26,6 +26,7 @@ public class StartedState extends State {
     @Override
     public void postponeTask() {
         message = "Postponed until: ";
+
         //recompute rec start time
         OrganizingTasks organizing = new OrganizingTasks();
         organizing.postpone(t);
@@ -42,8 +43,9 @@ public class StartedState extends State {
 
         t.setState(new PostponedState(t));
 
-        ListOfTasks.updateFirebase(t);
 
+        ListOfTasks l = new ListOfTasks();
+        l.updateFirebase(t);
     }
 
     @Override
@@ -62,6 +64,7 @@ public class StartedState extends State {
 
         t.setState(new FinishedState(t));
 
-        ListOfTasks.updateFirebase(t);
+        ListOfTasks l = new ListOfTasks();
+        l.updateFirebase(t);
     }
 }

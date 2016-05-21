@@ -17,7 +17,7 @@ import duenow.decoratorfactory.tasktype.SchoolTask;
  */
 public class SchoolTaskFactory extends AbstractTaskFactory{
     @Override
-    SchoolTask createSchoolTask(String type, int tn) {
+    public SchoolTask createSchoolTask(String type, int tn) {
         SchoolTask st;
         switch (type) {
             case "Homework":
@@ -48,7 +48,7 @@ public class SchoolTaskFactory extends AbstractTaskFactory{
     }
 
     @Override
-    PersonalTask createPersonalTask(String type, int tn) {
+    public PersonalTask createPersonalTask(String type, int tn) {
         return null;
     }
 }
