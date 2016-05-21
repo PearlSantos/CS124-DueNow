@@ -17,6 +17,21 @@
         android:layout_width="match_parent"
         android:layout_margin="@dimen/activity_vertical_margin"
         />
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:textSize="@dimen/body1"
+        android:text="Enter Task Duration(in minutes):"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:paddingRight="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        />
+    <EditText
+        android:id="@+id/custom_task_duration"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_margin="@dimen/activity_vertical_margin"
+        />
     <Button
         android:id="@+id/ok"
         android:layout_gravity="right"

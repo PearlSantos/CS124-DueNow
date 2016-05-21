@@ -29,6 +29,8 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 import duenow.decoratorfactory.R;
 
@@ -133,13 +135,25 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
 			}
 		});
-		
-		final ArrayList<String> task_types = new ArrayList<>();
-		task_types.add("None");
-        task_types.add("Quiz");
-        task_types.add("Paper");
-        task_types.add("Long Test");
-        task_types.add("Custom");
+        final ArrayList<String> task_types;
+        Set<String> set2 = taskTypePrefs.getStringSet("task types", null);
+        if(set2 != null){
+            task_types = new ArrayList<String>(set2);
+        }
+        else{
+            task_types = new ArrayList<>();
+            task_types.add("None");
+            task_types.add("Quiz");
+            task_types.add("Paper");
+            task_types.add("Long Test");
+            task_types.add("Custom");
+            Set<String> set = new HashSet<String>();
+            set.addAll(task_types);
+            SharedPreferences.Editor ed = taskTypePrefs.edit();
+            ed.putStringSet("task types", set);
+
+        }
+
 		
 		final ArrayList<String> priority = new ArrayList<>();
         priority.add("1(Highest)");
