@@ -23,7 +23,7 @@ public class NotStartedState extends State {
 
         // activate start time
         t.setTimeStarted(start);
-        t.setState(new StartedState(t));
+        t.setState("StartedState");
 
         ListOfTasks l = new ListOfTasks();
         l.updateFirebase(t);
@@ -37,7 +37,7 @@ public class NotStartedState extends State {
         OrganizingTasks organizing = new OrganizingTasks();
         organizing.postpone(t);
         message += f.format(t.getRecommendedStartTime().getTime());
-        t.setState(new PostponedState(t));
+        t.setState("PostponedState");
 
         ListOfTasks l = new ListOfTasks();
         l.updateFirebase(t);

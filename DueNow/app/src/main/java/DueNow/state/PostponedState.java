@@ -24,7 +24,7 @@ public class PostponedState extends State {
         message = "Originally Started: " + f.format(t.getTimeStarted().getTime()) + "\nTime Started: " + f.format(start.getTime());
 
         t.setTimeStarted(start);
-        t.setState(new StartedState(t));
+        t.setState("StartedState");
 
 
         ListOfTasks l = new ListOfTasks();

@@ -31,9 +31,16 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
+import duenow.ListOfTasks;
+import duenow.OrganizingTasks;
+import duenow.Task;
+import duenow.TaskBuilder;
+import duenow.decoratorfactory.AbstractTaskFactory;
+import duenow.decoratorfactory.FactoryProducer;
 import duenow.decoratorfactory.R;
 
 public class AddTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener{
@@ -111,12 +118,11 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         final SharedPreferences prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         taskTypePrefs = getSharedPreferences(PREFS2, Context.MODE_PRIVATE);
 
-		
 		Button save = (Button) findViewById(R.id.saveButton);
 
-		save.setOnClickListener(new View.OnClickListener(){
-			@Override
-			public void onClick(View v) {
+		save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 SharedPreferences.Editor ed = prefs.edit();
                 EditText taskName = (EditText) findViewById(R.id.newTaskName);
                 EditText taskDesc = (EditText) findViewById(R.id.taskDescription);
@@ -139,13 +145,34 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                     ed.commit();
                     Toast toast = Toast.makeText(con, "Task added successfully.", Toast.LENGTH_LONG);
                     toast.show();
+
+                    AbstractTaskFactory fp = FactoryProducer.getFactory("School");
+                    Task t = fp.createSchoolTask(taskChoice, 0);
+
+
+                    Calendar deadline3 = new GregorianCalendar();
+                    deadline3.set(2016, 4, 2, 13, 30);
+
+
+                    TaskBuilder buildTask = new TaskBuilder.Builder(t).difficulty(difficultyChoice)
+                            .name(taskName.getText().toString())
+                            .description(taskDesc.getText().toString())
+                            .priority(priorityChoice)
+                            .build();
+                    t = buildTask.createTask();
+                    OrganizingTasks o = new OrganizingTasks();
+                    o.addTask(t);
+
+                    buildTask.setNotification(getApplicationContext(), t);
+
+                    ListOfTasks l = new ListOfTasks();
+                    l.updateFirebase(t);
+
                     finish();
                 }
-
-
-
 			}
 		});
+
         final ArrayList<String> task_types;
         Set<String> set2 = taskTypePrefs.getStringSet("task types", null);
         //Set<String> set2 = null;

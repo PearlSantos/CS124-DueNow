@@ -17,6 +17,10 @@ import java.util.GregorianCalendar;
 
 import duenow.Task;
 import duenow.main.MainActivity;
+import duenow.state.FinishedState;
+import duenow.state.NotStartedState;
+import duenow.state.PostponedState;
+import duenow.state.StartedState;
 import duenow.state.State;
 
 /**
@@ -36,27 +40,38 @@ public class NotificationReceiver extends BroadcastReceiver {
         deadline3.set(2016, 4, 20, 13, 30);
         t.setDeadline(deadline3);
 
-        State state = t.getState();
-        State prev = state;
+        State currentState = null;
+        String stateName = t.getState();
+
+        if(stateName.equals("NotStartedState")){
+            currentState = new NotStartedState(t);
+        } else if(stateName.equals("StartedState")){
+            currentState = new StartedState(t);
+        } else if(stateName.equals("PostponedState")){
+            currentState = new PostponedState(t);
+        } else
+            currentState = new FinishedState(t);
+
+
         int id = intent.getIntExtra("ID", 0);
         String action = intent.getAction();
 
         System.out.println("CHECK: NOTIFICATION RECEIVER" + action);
 
         if(NotificationMaker.START.equals(action)){
-            state.startTask();
+            currentState.startTask();
             System.out.println("CHECK: START");
         }else if(NotificationMaker.FIN.equals(action)){
-            state.finishTask();
+            currentState.finishTask();
 
             System.out.println("CHECK: Fin");
         } else if(NotificationMaker.POST.equals(action)){
-            state.postponeTask();
+            currentState.postponeTask();
 
             System.out.println("CHECK: Post");
         }
 
-        if(!prev.getStateName().equals(t.getState().getStateName())) {
+        if(!stateName.equals(t.getState())) {
             NotificationManager n = (NotificationManager)
                     context.getSystemService(Context.NOTIFICATION_SERVICE);
             n.cancel(id);
@@ -64,7 +79,7 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         Intent goToMain = new Intent(context, MainActivity.class);
         goToMain.setAction(action);
-        goToMain.putExtra("MESSAGE", state.getMessage());
+        goToMain.putExtra("MESSAGE", currentState.getMessage());
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context, id, goToMain, PendingIntent.FLAG_UPDATE_CURRENT);
         try {

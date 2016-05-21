@@ -41,7 +41,7 @@ public class StartedState extends State {
         // add to time interval
         t.setTimeInterval(t.getTimeInterval() + mins);
 
-        t.setState(new PostponedState(t));
+        t.setState("PostponedState");
 
 
         ListOfTasks l = new ListOfTasks();
@@ -62,7 +62,7 @@ public class StartedState extends State {
         // set timeInterval
         t.setTimeInterval(t.getTimeInterval() + mins);
 
-        t.setState(new FinishedState(t));
+        t.setState("FinishedState");
 
         ListOfTasks l = new ListOfTasks();
         l.updateFirebase(t);

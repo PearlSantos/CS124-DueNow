@@ -34,7 +34,7 @@ public class CodeReuse {
         ArrayList<Task> list = ListOfTasks.getList();
         ArrayList<Task> newList= new ArrayList<>();
         for(Task e: list){
-            if(e.getState().getStateName().equals(state)){
+            if(e.getState().equals(state)){
                 newList.add(e);
             }
         }
