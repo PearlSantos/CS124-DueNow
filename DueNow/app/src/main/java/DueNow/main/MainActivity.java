@@ -43,22 +43,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Firebase.setAndroidContext(this);
-//
-//        String lol =  getIntent().getStringExtra("MESSAGE");
-//        if(lol!=null) {
-//            AlertDialog.Builder inform = new AlertDialog.Builder(this)
-//            .setMessage(getIntent().getStringExtra("MESSAGE"))
-//            .setTitle(getIntent().getAction() + " CLICKED")
-//                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                        public void onClick(DialogInterface dialog, int id) {
-//                            // if this button is clicked, close
-//                            // current activity
-//                            dialog.dismiss();
-//                        }
-//                    });
-//            inform.create().show();
-//        }
+        Firebase.setAndroidContext(this);
+
+        String lol =  getIntent().getStringExtra("MESSAGE");
+        if(lol!=null) {
+            AlertDialog.Builder inform = new AlertDialog.Builder(this)
+            .setMessage(getIntent().getStringExtra("MESSAGE"))
+            .setTitle(getIntent().getAction() + " CLICKED")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            dialog.dismiss();
+                        }
+                    });
+            inform.create().show();
+        }
 
         this.root = (FlyOutContainer) this.getLayoutInflater().inflate(R.layout.activity_main, null);
         list = (ListView) root.findViewById(R.id.menu);

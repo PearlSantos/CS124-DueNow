@@ -4,6 +4,10 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -50,9 +54,13 @@ public class TaskBuilder {
 
             return this;
         }
+        public Builder difficultyName(String dN){
+            t.setDifficulty(dN);
+            return this;
+        }
         public Builder deadline(String cal){
-           // final SimpleDateFormat f = new SimpleDateFormat("MMMMM d, hh:mm a");
-            final SimpleDateFormat f = new SimpleDateFormat("MMMMM d, yyyy");
+            final SimpleDateFormat f = new SimpleDateFormat("MMMMM d, yyyy, H:mm");
+          //  final SimpleDateFormat f = new SimpleDateFormat("MMMMM d, yyyy");
             Date date = null;
             try {
                  date = f.parse(cal);
@@ -87,9 +95,23 @@ public class TaskBuilder {
 
     public static void setNotification(Context c, Task t) {
         int id =  (int) System.currentTimeMillis();
+        String taskString = "";
+        try {
+            taskString = new ObjectMapper().writeValueAsString(t);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        final SharedPreferences prefs = c.getSharedPreferences("STORE_TASK", Context.MODE_PRIVATE);
+        SharedPreferences.Editor edit = prefs.edit();
+        edit.putString(t.uniqueId, taskString);
+        edit.commit();
 
         Intent intent = new Intent(c, NotificationMaker.class);
         intent.putExtra("ID", id);
+        intent.putExtra("TASKID", t.uniqueId);
+//        intent.putExtra("TASKNAME", t.getName());
+//        intent.putExtra("TASKDESC", t.getDescription());
         //     intent.putExtra("TASK", testT);
 
         PendingIntent pe = PendingIntent.getBroadcast(c, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);

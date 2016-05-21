@@ -159,6 +159,8 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                             .name(taskName.getText().toString())
                             .description(taskDesc.getText().toString())
                             .priority(priorityChoice)
+                            .deadline(((TextView)findViewById(R.id.deadline)).getText().toString())
+                            .difficultyName(difficultyChoice)
                             .build();
                     t = buildTask.createTask();
 

@@ -26,8 +26,8 @@ public class ListOfTasks extends Observable {
     public static final Firebase ref = new Firebase("https://cs124duenow.firebaseio.com/tasks");
 
     private static Task t;
+    public static ArrayList<Task> list;
     public ArrayList<Task> getList(){
-        final ArrayList<Task> list = new ArrayList<>();
         if(!list.isEmpty()) {
             for (Task ta : list) {
                 System.out.println("CHECK: START" + ta.getName());
@@ -64,7 +64,6 @@ public class ListOfTasks extends Observable {
             public void onCancelled(FirebaseError firebaseError) {
 
             }
-            // ....
         });
 
         if(!list.isEmpty()) {
@@ -113,11 +112,14 @@ public class ListOfTasks extends Observable {
         return list;
     }
 
-    public static Task getTask(String name, String description){
-        Query queryRef = ref.orderByKey().equalTo(name, "name").equalTo(description,"description").limitToFirst(1);
+    public static Task getTask(String uniqueId){
+        System.out.println("CHECK: " + uniqueId);
+        Query queryRef = ref.orderByChild("uniqueId").equalTo(uniqueId);
         queryRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                Map<String, Object> map = snapshot.getValue(Map.class);
+                System.out.println("CHECK: MAP" + map);
                 t = snapshot.getValue(Task.class);
                 System.out.println("CHECK: Task Name -" + t.getName());
             }
@@ -147,22 +149,10 @@ public class ListOfTasks extends Observable {
     }
 
     static Map<String, Object> taskMap;
-    static Firebase specTask;
     public void updateFirebase(Task t){
-//        this.addObserver(TaskListFragment.newInstance());
-//        this.addObserver(PostponedTasks.newInstance());
-//        this.addObserver(FinishedTasks.newInstance());
-
         ObjectMapper map = new ObjectMapper();
         taskMap = map.convertValue(t, Map.class);
 
-//        try {
-//            taskMap.put("state", map.writeValueAsString(t.getState()));
-//        } catch (JsonProcessingException e) {
-//            e.printStackTrace();
-//        }
-        //  specTask = ref.child(t.uniqueId);
-       // specTask.setValue(taskMap);
         ref.child(t.uniqueId).updateChildren(taskMap);
         System.out.println("CHECK: SAVED TO FIREBASE");
         this.notifyObservers();
