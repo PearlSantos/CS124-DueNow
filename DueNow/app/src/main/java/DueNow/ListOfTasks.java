@@ -27,11 +27,9 @@ public class ListOfTasks extends Observable {
     public static final Firebase ref = new Firebase("https://cs124duenow.firebaseio.com/tasks");
 
     private static Task t;
-    public static ArrayList<Task> list;
-    public ListOfTasks(){
-        list = new ArrayList<>();
-    }
-    public ArrayList<Task> getList(){
+    public static ArrayList<Task> list = new ArrayList<>();
+
+    public static ArrayList<Task> getList(){
         Query queryRef = ref.orderByKey();
         queryRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -63,6 +61,7 @@ public class ListOfTasks extends Observable {
 
             }
         });
+
         System.out.println("CHECK: END LIST SIZE" + list.size());
         if(!list.isEmpty()) {
             for (Task ta : list) {
