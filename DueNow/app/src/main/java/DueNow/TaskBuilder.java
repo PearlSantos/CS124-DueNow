@@ -15,11 +15,11 @@ public class TaskBuilder {
     protected Calendar deadline; //given by user
     protected int priority;
     private TaskBuilder(Builder builder) {
-        this.c = builder.c;
-        this.name = builder.name;
-        this.description = builder.description;
-        this.deadline = builder.deadline;
-        this.priority = builder.priority;
+//        this.c = builder.c;
+//        this.name = builder.name;
+//        this.description = builder.description;
+//        this.deadline = builder.deadline;
+//        this.priority = builder.priority;
     }
     public static class Builder{
         protected Task t;
@@ -46,14 +46,14 @@ public class TaskBuilder {
             return this;
         }
 
-        public Builder priority(int p){
-            this.priority = p;
-            return this;
+//        public Builder priority(int p){
+//            this.priority = p;
+//            return this;
         }
 
-        public Task build(){
-            return new Task(this);
-        }
-    }
+//        public Task build(){
+//            return new Task(this);
+//        }
+//    }
 
 }
