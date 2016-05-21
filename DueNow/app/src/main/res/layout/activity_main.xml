@@ -91,7 +91,8 @@
                 android:text="Tasks"
                 android:textSize="@dimen/headline"
                 android:layout_marginLeft="@dimen/icon_size2"
-                android:textColor="#FFFFFF" />
+                android:textColor="#FFFFFF" />				
+				
         </android.support.v7.widget.Toolbar>
 
             <FrameLayout
