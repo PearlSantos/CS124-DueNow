@@ -6,14 +6,19 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.NotificationCompat;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.client.Firebase;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import duenow.ListOfTasks;
 import duenow.Task;
 import duenow.decoratorfactory.R;
 
@@ -29,19 +34,39 @@ public class NotificationMaker extends BroadcastReceiver {
      //   Task t = (Task) intent.getSerializableExtra("TASK");
         Firebase.setAndroidContext(context);
 
-        System.out.println("CHECK: NOTIFICATION MAKER");
-        Task t = new Task();
-        t.setName("CS124 Project");
-        Calendar deadline3 = new GregorianCalendar();
-        deadline3.set(2016, 4, 20, 13, 30);
-        t.setDeadline(deadline3);
-
+        ListOfTasks l = new ListOfTasks();
+      //  Task t = l.getTask(intent.getStringExtra("TASKID"));
+        final SharedPreferences prefs = context.getSharedPreferences("STORE_TASK", Context.MODE_PRIVATE);
+        String taskString = prefs.getString(intent.getStringExtra("TASKID"), "");
+        Task t = null;
+        try {
+            t = new ObjectMapper().readValue(taskString, new TypeReference<Task>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         int id =  intent.getIntExtra("ID", 0);
         String deadlineString = f.format(t.getDeadline().getTime());
 
         Intent start = new Intent(context, NotificationReceiver.class);
         Intent fin = new Intent(context, NotificationReceiver.class);
         Intent post = new Intent(context, NotificationReceiver.class);
+
+        start.putExtra("TASKNAME", t.getName());
+        start.putExtra("TASKDESC", t.getDescription());
+        start.putExtra("TASKID", t.uniqueId);
+
+
+        fin.putExtra("TASKNAME", t.getName());
+        fin.putExtra("TASKDESC", t.getDescription());
+        fin.putExtra("TASKID", t.uniqueId);
+
+
+        post.putExtra("TASKNAME", t.getName());
+        post.putExtra("TASKDESC", t.getDescription());
+        post.putExtra("TASKID", t.uniqueId);
+
+
 
         start.putExtra("ID", id);
         fin.putExtra("ID", id);

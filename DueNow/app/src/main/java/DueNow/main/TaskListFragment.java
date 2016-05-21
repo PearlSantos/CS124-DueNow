@@ -90,8 +90,10 @@ public class TaskListFragment extends Fragment implements Observer {
 
         ListView taskList = (ListView) rootView.findViewById(R.id.main_listview);
         this.listView = taskList;
+
         // taskList.setAdapter(new CustomMainAdapter(this.getContext(), taskName, dateStart, deadline));
-        taskList.setAdapter(new EntryAdapter(this.getContext(), ListOfTasks.getList()));
+        ListOfTasks l = new ListOfTasks();
+        taskList.setAdapter(new EntryAdapter(this.getContext(), l.getList()));
         taskList.setOnItemClickListener(new ListView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -110,6 +112,7 @@ public class TaskListFragment extends Fragment implements Observer {
 
             }
         });
+
         return rootView;
     }
 
@@ -128,9 +131,11 @@ public class TaskListFragment extends Fragment implements Observer {
 
     @Override
     public void update(Observable observable, Object data) {
+        System.out.println("Update");
         CodeReuse.refresh(this, container);
         if (listView != null) {
-            listView.setAdapter(new EntryAdapter(this.getContext(), ListOfTasks.getList()));
+            ListOfTasks l = new ListOfTasks();
+            listView.setAdapter(new EntryAdapter(this.getContext(), l.getList()));
         }
 
     }
@@ -161,6 +166,7 @@ class EntryAdapter extends ArrayAdapter {
         super(context, 0, items);
         this.context = context;
         this.items = items;
+        System.out.println("CHECK: ITEM SIZE" + items.size());
         vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 

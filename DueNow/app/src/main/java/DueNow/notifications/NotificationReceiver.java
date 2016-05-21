@@ -6,15 +6,20 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.view.WindowManager;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.firebase.client.Firebase;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import duenow.ListOfTasks;
 import duenow.Task;
 import duenow.main.MainActivity;
 import duenow.state.FinishedState;
@@ -31,14 +36,19 @@ public class NotificationReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-     //   Task t = (Task) intent.getSerializableExtra("TASK");
         Firebase.setAndroidContext(context);
 
-        Task t = new Task();
-        t.setName("CS124 Project");
-        Calendar deadline3 = new GregorianCalendar();
-        deadline3.set(2016, 4, 20, 13, 30);
-        t.setDeadline(deadline3);
+        ListOfTasks l = new ListOfTasks();
+      //  Task t = l.getTask(intent.getStringExtra("TASKID"));
+        final SharedPreferences prefs = context.getSharedPreferences("STORE_TASK", Context.MODE_PRIVATE);
+        String taskString = prefs.getString(intent.getStringExtra("TASKID"), "");
+        Task t = null;
+        try {
+            t = new ObjectMapper().readValue(taskString, new TypeReference<Task>() {
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         State currentState = null;
         String stateName = t.getState();
@@ -76,7 +86,7 @@ public class NotificationReceiver extends BroadcastReceiver {
                     context.getSystemService(Context.NOTIFICATION_SERVICE);
             n.cancel(id);
         }
-
+        l.updateFirebase(t);
         Intent goToMain = new Intent(context, MainActivity.class);
         goToMain.setAction(action);
         goToMain.putExtra("MESSAGE", currentState.getMessage());

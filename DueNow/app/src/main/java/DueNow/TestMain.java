@@ -32,7 +32,7 @@ public class TestMain extends AppCompatActivity{
 
     public static void main(String args[]) {
 
-        ListOfTasks.getList();
+
 //        final SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
 //        TaskSimpleFactory f = new TaskSimpleFactory();
 //        OrganizingTasks o = new OrganizingTasks();

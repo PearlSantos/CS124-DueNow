@@ -32,6 +32,16 @@ public class Task {
     private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
 
     public final String uniqueId = Integer.toString((int) System.currentTimeMillis());
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    protected String difficulty;
     protected String name; // given by user
     protected String description; //given by user
     protected Calendar deadline; //given by user
