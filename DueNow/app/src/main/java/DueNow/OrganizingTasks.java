@@ -11,9 +11,9 @@ public class OrganizingTasks {
     private ArrayList<Task> list;
     private final int REST_TIME = 30; //mins
     DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-
+    private ListOfTasks lot = new ListOfTasks();
     public OrganizingTasks() {
-        this.list = ListOfTasks.getList();
+        this.list = lot.getList();
     }
 
     public ArrayList<Task> getList(){
@@ -83,6 +83,9 @@ public class OrganizingTasks {
 
 
         list = newList;
+        for(Task e: list){
+            lot.updateFirebase(e);
+        }
     }
 
     public void adjustRecTime(ArrayList<Task> newList, int indexStart) {

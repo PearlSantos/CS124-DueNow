@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="duenow.decoratorfactory">
 
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:allowBackup="true"
@@ -10,7 +12,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <uses-permission android:name="android.permission.INTERNET" />
         <!--<meta-data-->
             <!--android:name="com.facebook.FacebookActivity"-->
             <!--android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
@@ -37,14 +38,32 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name="duenow.main.LoginActivity"
+            android:label="@string/title_activity_login">
+        </activity>
+
+
+        <activity android:name="duenow.notifications.NotifyUser"
+            android:label="NotifyUser">
+        </activity>
+
+        <receiver
+            android:process=":remote"
+            android:name="duenow.notifications.NotificationMaker">
+            </receiver>
+
+        <receiver
+            android:process=":remote"
+            android:name="duenow.notifications.NotificationReceiver">
+        </receiver>
 		<activity
             android:name="duenow.main.AddTaskActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan"
 			android:parentActivityName="duenow.main.MainActivity"></activity>
-        <activity
-            android:name="duenow.main.LoginActivity"
-            android:label="@string/app_name"></activity>
+
     </application>
 
 </manifest>

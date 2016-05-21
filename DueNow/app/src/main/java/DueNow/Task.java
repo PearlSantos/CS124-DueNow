@@ -1,5 +1,6 @@
 package duenow;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -8,17 +9,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.firebase.client.Firebase;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
+import duenow.notifications.NotificationMaker;
 import duenow.state.NotStartedState;
 import duenow.state.State;
 
 /**
  * Created by elysi on 3/30/2016.
  */
-public class Task implements Observer {
+public class Task {
+    private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
+
+    public final String uniqueId = Integer.toString((int) System.currentTimeMillis());
     protected Context c;
     protected String name; // given by user
     protected String description; //given by user
@@ -32,8 +45,7 @@ public class Task implements Observer {
     protected int timeNeeded; // timeNeeded is in minutes
     protected State state = new NotStartedState(this);
 
-    // don't forget to wrap in difficulty!
-    // don't forget to set context!
+
 
     public void setC(Context c) {
         this.c = c;
@@ -85,6 +97,7 @@ public class Task implements Observer {
 
     public void setRecommendedStartTime(Calendar recommendedStartTime) {
         this.recommendedStartTime = recommendedStartTime;
+        setNotification();
     }
 
     public Calendar getRecommendedTimeFinish() {
@@ -109,7 +122,8 @@ public class Task implements Observer {
         return this.timeNeeded;
     }
 
-    public void setTimeNeeded(int timeNeeded){ this.timeNeeded = timeNeeded;}
+    public void setTimeNeeded(int timeNeeded){
+        this.timeNeeded = timeNeeded;}
 
     public State getState() {
         return state;
@@ -127,28 +141,19 @@ public class Task implements Observer {
         this.priority = priority;
     }
 
-    @Override
-    public void update(Observable observable, Object data) {
-        Intent start = new Intent();
-        start.setAction("START");
-        Bundle startBundle = new Bundle();
-        startBundle.putString("time", "format time");
-        start.putExtras(startBundle);
-        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(c, (int) System.currentTimeMillis(), start, PendingIntent.FLAG_UPDATE_CURRENT);
+    public void setNotification() {
+        int id =  (int) System.currentTimeMillis();
 
-        NotificationCompat.Action.Builder s = new NotificationCompat.Action.Builder(android.R.drawable.ic_dialog_email, "Start", pendingIntentStart);
-        NotificationCompat.Builder n = new NotificationCompat.Builder(c)
-                .setContentTitle("New mail from " + "test@gmail.com")
-                .setContentText("Subject")
-                .setSmallIcon(android.R.drawable.ic_menu_mapmode)
-                .setAutoCancel(true)
-                .addAction(s.build())
-                .setPriority(Notification.PRIORITY_MAX)
-                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
-                .setWhen(recommendedStartTime.getTimeInMillis());
+        Intent intent = new Intent(c, NotificationMaker.class);
+        intent.putExtra("ID", id);
+        //     intent.putExtra("TASK", testT);
 
-        NotificationManager notificationManager = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
+        PendingIntent pe = PendingIntent.getBroadcast(c, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pe);
 
-        notificationManager.notify((int)System.currentTimeMillis(), n.build());
+        alarmManager.set(AlarmManager.RTC_WAKEUP, recommendedStartTime.getTimeInMillis(), pe);
+
+        System.out.println("CHECK: ALARM MANAGER");
     }
 }

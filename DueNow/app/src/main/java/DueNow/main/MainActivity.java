@@ -2,9 +2,11 @@ package duenow.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,7 +32,11 @@ public class MainActivity extends AppCompatActivity {
 
     FlyOutContainer root;
     final String[] options = {"Tasks", "Postponed Tasks", "Finished Tasks", "Account Settings", "Logout"};
-    final Integer[] imgID = {R.mipmap.ic_view_list_black_24dp, R.mipmap.ic_watch_later_black_24dp, R.mipmap.ic_check_black_24dp, R.mipmap.ic_account_box_black_24dp ,R.mipmap.ic_exit_to_app_black_24dp};
+    final Integer[] imgID = {R.mipmap.ic_view_list_black_24dp,
+            R.mipmap.ic_watch_later_black_24dp,
+            R.mipmap.ic_check_black_24dp,
+            R.mipmap.ic_account_box_black_24dp ,
+            R.mipmap.ic_exit_to_app_black_24dp};
     ListView list;
 
 
@@ -38,6 +44,22 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Firebase.setAndroidContext(this);
+
+        String lol =  getIntent().getStringExtra("MESSAGE");
+        if(lol!=null) {
+            AlertDialog.Builder inform = new AlertDialog.Builder(this)
+            .setMessage(getIntent().getStringExtra("MESSAGE"))
+            .setTitle(getIntent().getAction() + " CLICKED")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close
+                            // current activity
+                            dialog.dismiss();
+                        }
+                    });
+            inform.create().show();
+        }
+
         this.root = (FlyOutContainer) this.getLayoutInflater().inflate(R.layout.activity_main, null);
         list = (ListView) root.findViewById(R.id.menu);
 		list.setAdapter(new CustomList(this, options, imgID));
@@ -123,11 +145,11 @@ public class MainActivity extends AppCompatActivity {
                     root.toggleMenu();
                     break;
                 case 1:
-                    fragment = new TaskListFragment(); //must be PostponedTasks
+                    fragment = new PostponedTasks(); //must be PostponedTasks
                     root.toggleMenu();
                     break;
                 case 2:
-                    fragment = new TaskListFragment(); //finished tasks
+                    fragment = new FinishedTasks(); //finished tasks
                     root.toggleMenu();
                     break;
                 case 3:

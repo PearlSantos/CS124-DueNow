@@ -7,11 +7,15 @@ import duenow.Task;
  */
 public abstract class State {
     protected Task t;
+    protected String name;
     protected String message;
-    abstract void startTask();
-    abstract void postponeTask();
-    abstract void finishTask();
+    public abstract void startTask();
+    public abstract void postponeTask();
+    public abstract void finishTask();
     public String getMessage(){
         return message;
+    }
+    public String getStateName(){
+        return name;
     }
 }

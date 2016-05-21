@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,9 +18,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 import duenow.ListOfTasks;
-import duenow.Task;
 import duenow.decoratorfactory.R;
 import duenow.item.EntryItem;
+import duenow.item.Item;
 import duenow.item.SectionItem;
 
 /**
@@ -29,33 +31,34 @@ import duenow.item.SectionItem;
  * Use the {@link TaskListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskListFragment extends Fragment implements Observer {
+public class PostponedTasks extends Fragment implements Observer {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private ViewGroup container;
-    private ListView listView;
-
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ViewGroup container;
+    private ListView listView;
 
     private OnFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
+     *
      * @return A new instance of fragment TaskListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static TaskListFragment newInstance() {
-        TaskListFragment fragment = new TaskListFragment();
+    public static PostponedTasks newInstance() {
+        PostponedTasks fragment = new PostponedTasks();
         return fragment;
     }
 
-    public TaskListFragment() {
+    public PostponedTasks() {
         // Required empty public constructor
     }
 
@@ -71,21 +74,12 @@ public class TaskListFragment extends Fragment implements Observer {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        this.container = container;
-//        ArrayList<Item> items = new ArrayList<>();
-//        items.add(new SectionItem("Monday"));
-//        items.add(new EntryItem("Hi","Hi","Hi"));
-//        items.add(new EntryItem("Hello","Hello","Hello"));
-//        items.add(new EntryItem("How","How","How"));
-//        items.add(new SectionItem("Tuesday"));
-//        items.add(new EntryItem("Are","Are","Are"));
-//        items.add(new EntryItem("You","You","You"));
+
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         //ImageButton FAB = (ImageButton) rootView.findViewById(R.id.fabButton);
 
 
         ListView taskList = (ListView) rootView.findViewById(R.id.main_listview);
-        this.listView = taskList;
         // taskList.setAdapter(new CustomMainAdapter(this.getContext(), taskName, dateStart, deadline));
         taskList.setAdapter(new EntryAdapter(this.getContext(), ListOfTasks.getList()));
         return rootView;
@@ -107,9 +101,7 @@ public class TaskListFragment extends Fragment implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         CodeReuse.refresh(this, container);
-        if (listView != null) {
-            listView.setAdapter(new EntryAdapter(this.getContext(), ListOfTasks.getList()));
-        }
+        CodeReuse.refreshList("PostponedState", listView, this.getContext());
 
     }
 
@@ -127,56 +119,11 @@ public class TaskListFragment extends Fragment implements Observer {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
+
+
 }
 
-
-class EntryAdapter extends ArrayAdapter {
-    ArrayList<Task> items;
-    Context context;
-    private static LayoutInflater vi = null;
-
-    public EntryAdapter(Context context, ArrayList<Task> items) {
-        super(context, 0, items);
-        this.context = context;
-        this.items = items;
-        vi = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView = convertView;
-        final Task i = items.get(position);
-//        if (i != null) {
-//            if(i.isSection()){
-//                SectionItem si = (SectionItem)i;
-//                rowView = vi.inflate(R.layout.dummy_item, null);
-//                rowView.setOnClickListener(null);
-//                rowView.setOnLongClickListener(null);
-//                rowView.setLongClickable(false);
-//                final TextView sectionView = (TextView) rowView.findViewById(R.id.divider);
-//                sectionView.setText(si.desc);
-//            } else {
-//                EntryItem ei = (EntryItem)i;
-//                rowView = vi.inflate(R.layout.list_item, null);
-//                TextView taskName = (TextView) rowView.findViewById(R.id.taskname);
-//                TextView timeStart = (TextView) rowView.findViewById(R.id.starting_date);
-//                TextView deadline = (TextView) rowView.findViewById(R.id.deadline);
-//                if(taskName != null) taskName.setText(ei.taskname);
-//                if(timeStart != null) timeStart.setText(ei.dateStart);
-//                if(deadline != null) deadline.setText(ei.deadLine);
-//            }
-//        }
-        rowView = vi.inflate(R.layout.list_item, null);
-        TextView taskName = (TextView) rowView.findViewById(R.id.taskname);
-        taskName.setText(i.getName());
-        TextView timeStart = (TextView) rowView.findViewById(R.id.starting_date);
-        timeStart.setText(ListOfTasks.f.format(i.getRecommendedStartTime().getTime()));
-        TextView deadline = (TextView) rowView.findViewById(R.id.deadline);
-        deadline.setText(ListOfTasks.f.format(i.getDeadline().getTime()));
-
-        return rowView;
-    }
-}
 
 
 

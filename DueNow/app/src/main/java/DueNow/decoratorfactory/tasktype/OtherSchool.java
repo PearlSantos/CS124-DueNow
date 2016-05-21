@@ -5,8 +5,8 @@ import duenow.Task;
 /**
  * Created by elysi on 4/1/2016.
  */
-public class Other extends Task {
-    public Other(int tN) {
+public class OtherSchool extends SchoolTask {
+    public OtherSchool(int tN) {
         this.timeNeeded = tN;
     }
 }

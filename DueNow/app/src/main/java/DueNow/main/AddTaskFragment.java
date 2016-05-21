@@ -1,12 +1,10 @@
 package duenow.main;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
+import duenow.ListOfTasks;
+import duenow.Task;
+import duenow.decoratorfactory.AbstractTaskFactory;
+import duenow.decoratorfactory.FactoryProducer;
 import duenow.decoratorfactory.R;
+
 //import duenow.viewgroup.SpinnerDialog;
 
 public class AddTaskFragment extends Fragment {
@@ -74,11 +79,41 @@ public class AddTaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.layout_new_task, container, false);
-		
-		
-		
-		
+        final View rootView = inflater.inflate(R.layout.layout_new_task, container, false);
+
+        ArrayList<String> diff = new ArrayList<String>();
+        diff.add("Easy");
+        diff.add("Medium");
+        diff.add("Difficult");
+        Spinner d = (Spinner) rootView.findViewById(R.id.difficulty);
+        d.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, diff));
+
+                ((Button) rootView.findViewById(R.id.testSave)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AbstractTaskFactory fp = FactoryProducer.getFactory("School");
+                        Task t = fp.createSchoolTask("Homework", 0);
+
+                        EditText taskName = (EditText) rootView.findViewById(R.id.taskName);
+                        EditText taskDescription = (EditText) rootView.findViewById(R.id.taskName);
+
+                        Calendar deadline3 = new GregorianCalendar();
+                        deadline3.set(2016, 4, 2, 13, 30);
+
+                        t.setDeadline(deadline3);
+                        t.setC(getContext());
+                        t.setName(taskName.getText().toString());
+                        t.setDescription(taskDescription.getText().toString());
+
+                       // OrganizingTasks o = new OrganizingTasks();
+                       // o.addTask(t);
+
+                        ListOfTasks l = new ListOfTasks();
+                        l.updateFirebase(t);
+
+                    }
+                });
+
         final ArrayList<String> task_types = new ArrayList<>();
         task_types.add("Quiz");
         task_types.add("Paper");
@@ -182,7 +217,7 @@ public class AddTaskFragment extends Fragment {
 //     * <p/>
 //     * See the Android Training lesson <a href=
 //     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
+//     * >Communicating with OtherSchool Fragments</a> for more information.
 //     */
 //    public interface OnFragmentInteractionListener {
 //        // TODO: Update argument type and name

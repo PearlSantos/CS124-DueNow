@@ -85,7 +85,12 @@
 
             </LinearLayout>
 
-
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="testSave"
+                android:id="@+id/testSave" />
 
 
         </LinearLayout>
@@ -167,7 +172,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/subheading4"
-                        android:id="@+id/dueDate"
+                        android:id="@+id/deadline"
                         android:text="February 20, 2014"/>
                 </LinearLayout>
             </LinearLayout>

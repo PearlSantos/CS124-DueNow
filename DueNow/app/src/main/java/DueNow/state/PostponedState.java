@@ -3,6 +3,7 @@ package duenow.state;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import duenow.ListOfTasks;
 import duenow.Task;
 
 /**
@@ -12,6 +13,7 @@ public class PostponedState extends State {
     private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
 
     public PostponedState(Task task){
+        this.name = "PostponedState";
         t = task;
     }
 
@@ -19,10 +21,14 @@ public class PostponedState extends State {
     public void startTask() {
         message = "Starting task: ";
         Calendar start = Calendar.getInstance();
-        message = "Originally Started: " + f.format(t.getTimeStarted()) + "\nTime Started: " + f.format(start);
+        message = "Originally Started: " + f.format(t.getTimeStarted().getTime()) + "\nTime Started: " + f.format(start.getTime());
+
         t.setTimeStarted(start);
         t.setState(new StartedState(t));
 
+
+        ListOfTasks l = new ListOfTasks();
+        l.updateFirebase(t);
     }
 
     @Override
