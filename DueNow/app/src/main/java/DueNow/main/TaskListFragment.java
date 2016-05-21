@@ -97,7 +97,8 @@ public class TaskListFragment extends Fragment implements Observer {
         taskList.setOnItemClickListener(new ListView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Task t = ListOfTasks.getList().get(position);
+                ListOfTasks l = new ListOfTasks();
+                Task t = l.getList().get(position);
                 SharedPreferences.Editor ed = taskInfo.edit();
                 ed.putString("task name", t.getName());
                 ed.putString("task desc", t.getDescription());
@@ -105,10 +106,11 @@ public class TaskListFragment extends Fragment implements Observer {
                 ed.putInt("task priority", t.getPriority());
                 //ed.putString("state", t.getState());
                 ed.putString("recommended start time", t.getRecommendedStartTime().toString());
+                ed.putString("task difficulty", t.getDifficulty());
                 ed.commit();
                 Intent i = new Intent(getActivity(), ViewTaskActivity.class);
                 startActivity(i);
-                //ed.putString("task difficulty", t.getDifficulty());
+
 
             }
         });
