@@ -19,13 +19,13 @@
                 android:layout_gravity="left"
                 android:background="@android:color/transparent"
 				android:onClick="endActivity"
-                android:src="@mipmap/ic_menu_white_24dp"/> <!--remember to change this into a back button-->
+                android:src="@mipmap/ic_close_white_24dp"/> <!--remember to change this into a back button-->
 
             <TextView
                 android:id="@+id/appTitle"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tasks"
+                android:text="New Tasks"
                 android:textSize="@dimen/headline"
                 android:layout_marginLeft="@dimen/icon_size2"
                 android:textColor="#FFFFFF" />
@@ -63,10 +63,12 @@
                     android:textSize="@dimen/body1"/>
 
                 <EditText
+                    android:id="@+id/newTaskName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Project Priorities"
-                    android:textColor="#FFFFFF"
+                    android:hint="New Task"
+                    android:textColorHint="@color/grey"
+                    android:textColor="@color/white"
                     android:textSize="@dimen/headline2"/>
 
                 <EditText
@@ -98,7 +100,6 @@
             android:layout_weight="1"
             android:orientation="vertical">
             <LinearLayout
-                android:id="@+id/task_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/activity_vertical_margin"
@@ -125,12 +126,11 @@
                         android:textColor="#000000"
                         android:textSize="@dimen/subheading4"
                         android:text="Task Type"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/subheading4"
-                        android:id="@+id/taskType"
-                        android:text="None"/>
+                     <Spinner
+						android:id="@+id/task_type"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_horizontal" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -173,7 +173,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/priority_click"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -200,17 +199,15 @@
                         android:textColor="#000000"
                         android:textSize="@dimen/subheading4"
                         android:text="Priority"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/subheading4"
-                        android:id="@+id/priority"
-                        android:text="1"/>
+                    <Spinner
+						android:id="@+id/priority_click"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_horizontal" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/difficulty_level"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -237,12 +234,11 @@
                         android:textColor="#000000"
                         android:textSize="@dimen/subheading4"
                         android:text="Difficulty"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/subheading4"
-                        android:id="@+id/difficulty"
-                        android:text="1"/>
+                    <Spinner
+						android:id="@+id/difficulty_level"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_gravity="center_horizontal" />
             </LinearLayout>
 
         </LinearLayout>
