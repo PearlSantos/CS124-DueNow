@@ -26,6 +26,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,22 +43,31 @@ import duenow.decoratorfactory.AbstractTaskFactory;
 import duenow.decoratorfactory.FactoryProducer;
 import duenow.decoratorfactory.R;
 
-public class AddTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
-	Spinner sp;
-	final String PREFS = "CHOICE";
+public class AddTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+    Spinner sp;
+    final String PREFS = "CHOICE";
     final String PREFS2 = "TASK TYPES";
+    SharedPreferences taskTypePrefs;
     String choice;
     String taskChoice;
     String dateChoice;
     String priorityChoice;
     String difficultyChoice;
+    String time;
     final Context con = this;
 
-	
-	@Override
-	public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
+        if (minute == 0)
+            time = hourOfDay + ":" + minute + "0";
+        else
+            time = hourOfDay + ":" + minute;
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
         String month = "";
-        switch(monthOfYear+1){
+        switch (monthOfYear + 1) {
             case 1:
                 month = "January";
                 break;
@@ -95,25 +106,81 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                 break;
 
         }
-		dateChoice = month + " " + dayOfMonth + ", " + year;
+        dateChoice = month + " " + dayOfMonth + ", " + year;
         TextView dateTextView = (TextView) findViewById(R.id.deadline);
-	    dateTextView.setText(dateChoice);
-	  
-	}
+        dateTextView.setText(dateChoice + ", " + time);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_new_task);
         final SharedPreferences prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-        final SharedPreferences taskTypePrefs = getSharedPreferences(PREFS2, Context.MODE_PRIVATE);
+        taskTypePrefs = getSharedPreferences(PREFS2, Context.MODE_PRIVATE);
+
+        Button save = (Button) findViewById(R.id.saveButton);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor ed = prefs.edit();
+                EditText taskName = (EditText) findViewById(R.id.newTaskName);
+                EditText taskDesc = (EditText) findViewById(R.id.taskDescription);
+                if (taskName.getText().toString().matches("")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(con);
+                    builder.setMessage("Please indicate your task's name");
+                    builder.setPositiveButton("OK", null);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                } else {
+                    ed.putString("taskName", taskName.getText().toString());
+                    ed.putString("taskType", taskChoice);
+                    ed.putString("deadline", dateChoice);
+                    ed.putString("priority", priorityChoice);
+                    ed.putString("difficulty", difficultyChoice);
+                    if (!taskDesc.getText().toString().matches("")) {
+                        ed.putString("taskDesc", taskDesc.getText().toString());
+                    }
+
+                    ed.commit();
+                    Toast toast = Toast.makeText(con, "Task added successfully.", Toast.LENGTH_LONG);
+                    toast.show();
+
+                    AbstractTaskFactory fp = FactoryProducer.getFactory("School");
+                    Task t = fp.createSchoolTask(taskChoice, 0);
+
+
+                    Calendar deadline3 = new GregorianCalendar();
+                    deadline3.set(2016, 4, 2, 13, 30);
+
+
+                    TaskBuilder buildTask = new TaskBuilder.Builder(t).difficulty(difficultyChoice)
+                            .name(taskName.getText().toString())
+                            .description(taskDesc.getText().toString())
+                            .priority(priorityChoice)
+                            .build();
+                    t = buildTask.createTask();
+
+                    OrganizingTasks o = new OrganizingTasks();
+                    o.addTask(t);
+
+                    buildTask.setNotification(getApplicationContext(), t);
+
+                    ListOfTasks l = new ListOfTasks();
+                    l.updateFirebase(t);
+
+                    finish();
+                }
+            }
+        });
 
         final ArrayList<String> task_types;
         Set<String> set2 = taskTypePrefs.getStringSet("task types", null);
-        if(set2 != null){
+        //Set<String> set2 = null;
+        if (set2 != null) {
             task_types = new ArrayList<String>(set2);
-        }
-        else{
+        } else {
             task_types = new ArrayList<>();
             task_types.add("None");
             task_types.add("Quiz");
@@ -124,24 +191,25 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
             set.addAll(task_types);
             SharedPreferences.Editor ed = taskTypePrefs.edit();
             ed.putStringSet("task types", set);
+            ed.commit();
 
         }
 
-		
-		final ArrayList<String> priority = new ArrayList<>();
+
+        final ArrayList<String> priority = new ArrayList<>();
         priority.add("1(Highest)");
         priority.add("2");
         priority.add("3(Lowest)");
-		
-		final ArrayList<String> difficulty = new ArrayList<>();
+
+        final ArrayList<String> difficulty = new ArrayList<>();
         difficulty.add("Easy");
         difficulty.add("Medium");
         difficulty.add("Hard");
 
         final Spinner taskType = (Spinner) findViewById(R.id.task_type);
-		taskChoice = launchDialog(taskType, task_types);
-		
-		LinearLayout dueDate = (LinearLayout) findViewById(R.id.due_date);
+        taskChoice = launchDialog(taskType, task_types);
+
+        LinearLayout dueDate = (LinearLayout) findViewById(R.id.due_date);
         dueDate.setClickable(true);
         dueDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,70 +224,24 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                 dpd.setAccentColor(getResources().getColor(R.color.mdtp_accent_color));
                 dpd.show(getFragmentManager(), "Datepickerdialog");
 
+                TimePickerDialog tpd = TimePickerDialog.newInstance(
+                        AddTaskActivity.this,
+                        Calendar.HOUR,
+                        Calendar.MINUTE,
+                        false);
+                tpd.setAccentColor(getResources().getColor(R.color.mdtp_accent_color));
+                tpd.show(getFragmentManager(), "Timepickerdialog");
+
             }
         });
-		
-		final Spinner priorityClick = (Spinner) findViewById(R.id.priority_click);
-        priorityChoice =launchDialog(priorityClick, priority);
-        
-		
-		final Spinner difficultyLevel = (Spinner) findViewById(R.id.difficulty_level);
-        difficultyChoice =launchDialog(difficultyLevel, difficulty);
 
-        Button save = (Button) findViewById(R.id.saveButton);
-
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor ed = prefs.edit();
-                EditText taskName = (EditText) findViewById(R.id.newTaskName);
-                EditText taskDesc = (EditText) findViewById(R.id.taskDescription);
-                if(taskName.getText().toString().matches("")){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(con);
-                    builder.setMessage("Please indicate your task's name");
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                }else{
-                    ed.putString("taskName", taskName.getText().toString());
-                    ed.putString("taskType", taskChoice);
-                    ed.putString("deadline", dateChoice);
-                    ed.putString("priority", priorityChoice);
-                    ed.putString("difficulty", difficultyChoice);
-                    if(!taskDesc.getText().toString().matches("")){
-                        ed.putString("taskDesc", taskDesc.getText().toString());
-                    }
-
-                    ed.commit();
-                    Toast toast = Toast.makeText(con, "Task added successfully.", Toast.LENGTH_LONG);
-                    toast.show();
-
-                    AbstractTaskFactory fp = FactoryProducer.getFactory("School");
-                    Task t = fp.createSchoolTask((String)taskType.getSelectedItem(), 0);
+        final Spinner priorityClick = (Spinner) findViewById(R.id.priority_click);
+        priorityChoice = launchDialog(priorityClick, priority);
 
 
-                    Calendar deadline3 = new GregorianCalendar();
-                    deadline3.set(2016, 4, 2, 13, 30);
+        final Spinner difficultyLevel = (Spinner) findViewById(R.id.difficulty_level);
+        difficultyChoice = launchDialog(difficultyLevel, difficulty);
 
-
-                    TaskBuilder buildTask = new TaskBuilder.Builder(t).difficulty((String)difficultyLevel.getSelectedItem())
-                            .name(taskName.getText().toString())
-                            .description(taskDesc.getText().toString())
-                            .priority((String)priorityClick.getSelectedItem())
-                            .deadline(((TextView)findViewById(R.id.deadline)).getText().toString())
-                            .build();
-                    t = buildTask.createTask();
-                    OrganizingTasks o = new OrganizingTasks();
-                     o.addTask(t);
-
-                    //buildTask.setNotification(getApplicationContext(), t);
-
-                    ListOfTasks l = new ListOfTasks();
-                    l.updateFirebase(t);
-
-                    finish();
-                }
-            }
-        });
 
     }
 
@@ -244,8 +266,8 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
         return super.onOptionsItemSelected(item);
     }
-	
-	public void endActivity(View v){
+
+    public void endActivity(View v) {
         AlertDialog.Builder builder = new AlertDialog.Builder(con);
         builder.setMessage("Discard changes?");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -257,14 +279,15 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         builder.setNegativeButton("CANCEL", null);
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-	}
-	
-	public String launchDialog(Spinner sp, ArrayList<String> list){
+    }
+
+    public String launchDialog(Spinner sp, ArrayList<String> listP) {
         //String choice;
-		Spinner spin = sp;
+        final ArrayList<String> list = listP;
+        final Spinner spin = sp;
         final Context appCon = this;
-		spin.setAdapter(new ArrayAdapter<String>(AddTaskActivity.this, R.layout.dropdown_item, list));
-		spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spin.setAdapter(new ArrayAdapter<String>(AddTaskActivity.this, R.layout.dropdown_item, list));
+        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 choice = (String) parent.getItemAtPosition(position);
@@ -280,23 +303,29 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
                         @Override
                         public void onClick(View v) {
                             final EditText customTaskType = (EditText) dialog.findViewById(R.id.custom_task_type);
-                            choice = customTaskType.getText().toString();
-//                                    SharedPreferences.Editor ed = prefs.edit();
-//                                    ed.putString("choice", newTaskType);
-//                                    ed.commit();
+                            final EditText customTaskDuration = (EditText) dialog.findViewById(R.id.custom_task_duration);
+                            if (!customTaskType.getText().toString().isEmpty()) {
+                                choice = customTaskType.getText().toString();
+                                list.remove("Custom");
+                                list.add(choice);
+                                list.add("Custom");
+                                ArrayAdapter<String> adapter = new ArrayAdapter<String>(AddTaskActivity.this, R.layout.dropdown_item, list);
+                                spin.setAdapter(adapter);
+                                spin.setSelection(adapter.getPosition(choice));
+                                Set<String> set = new HashSet<String>();
+                                set.addAll(list);
+                                SharedPreferences.Editor ed = taskTypePrefs.edit();
+                                ed.putStringSet("task types", set);
+                                ed.commit();
+                            }
+
                             dialog.dismiss();
                         }
                     });
 
                     dialog.show();
-                }
-//                        else {
-//                            SharedPreferences.Editor ed = prefs.edit();
-//                            ed.putString("choice", choice);
-//                            ed.commit();
-//                            //dialog.dismiss();
-//                        }
 
+                }
 
             }
 
@@ -308,9 +337,8 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
 
         });
-        System.out.println("CHECK: " + choice);
-        return choice;
-	}
+        return spin.getSelectedItem().toString();
+    }
 }
 
 

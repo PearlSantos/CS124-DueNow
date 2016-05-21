@@ -65,6 +65,7 @@ public class TaskBuilder {
             return this;
         }
 
+
         public Builder priority(String p){
             if(p.contains("1"))
                 t.setPriority(1);
