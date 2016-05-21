@@ -24,6 +24,7 @@ import duenow.notifications.NotificationMaker;
  */
 public class TaskBuilder {
     protected Task t;
+
     private TaskBuilder(Builder builder) {
         this.t = builder.t;
     }

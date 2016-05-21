@@ -7,6 +7,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -27,21 +28,18 @@ public class ListOfTasks extends Observable {
 
     private static Task t;
     public static ArrayList<Task> list;
+    public ListOfTasks(){
+        list = new ArrayList<>();
+    }
     public ArrayList<Task> getList(){
-        if(!list.isEmpty()) {
-            for (Task ta : list) {
-                System.out.println("CHECK: START" + ta.getName());
-            }
-        }
-
         Query queryRef = ref.orderByKey();
         queryRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
                 Map<String, Object> map = snapshot.getValue(Map.class);
-               System.out.println("CHECK: MAP" + map);
-                Task task = new ObjectMapper().convertValue(map, Task.class);
-                list.add(task);
+                System.out.println("CHECK: MAP" + map);
+                t = new ObjectMapper().convertValue(map, Task.class);
+                list.add(t);
                 System.out.println("CHECK: LIST SIZE " + list.size());
             }
 
@@ -65,7 +63,7 @@ public class ListOfTasks extends Observable {
 
             }
         });
-
+        System.out.println("CHECK: END LIST SIZE" + list.size());
         if(!list.isEmpty()) {
             for (Task ta : list) {
                 System.out.println("CHECK: END" + ta.getName());
@@ -76,7 +74,6 @@ public class ListOfTasks extends Observable {
 
 
     public ArrayList<Task> getList(String state) {
-        final ArrayList<Task> list = new ArrayList<>();
         Query queryRef = ref.orderByChild("state").equalTo(state, "state");
         queryRef.addChildEventListener(new ChildEventListener() {
             @Override
@@ -155,6 +152,7 @@ public class ListOfTasks extends Observable {
 
         ref.child(t.uniqueId).updateChildren(taskMap);
         System.out.println("CHECK: SAVED TO FIREBASE");
+
         this.notifyObservers();
     }
 

@@ -86,6 +86,7 @@ public class TaskListFragment extends Fragment implements Observer {
 
         ListView taskList = (ListView) rootView.findViewById(R.id.main_listview);
         this.listView = taskList;
+
         // taskList.setAdapter(new CustomMainAdapter(this.getContext(), taskName, dateStart, deadline));
 
         ListOfTasks l = new ListOfTasks();
