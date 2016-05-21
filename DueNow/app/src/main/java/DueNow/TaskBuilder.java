@@ -7,6 +7,9 @@ import android.content.Intent;
 
 import java.util.Calendar;
 
+import duenow.decoratorfactory.difficulty.EasyDifficulty;
+import duenow.decoratorfactory.difficulty.HardDifficulty;
+import duenow.decoratorfactory.difficulty.MedDifficulty;
 import duenow.notifications.NotificationMaker;
 
 /**
@@ -22,10 +25,6 @@ public class TaskBuilder {
         public Builder(Task t){
             this.t = t;
         }
-        public Builder context(Context context){
-            t.setC(context);
-            return this;
-        }
 
         public Builder name(String n){
             t.setName(n);
@@ -37,13 +36,28 @@ public class TaskBuilder {
             return this;
         }
 
+        public Builder difficulty(String diff){
+            if(diff.equals("Easy")){
+                t = new EasyDifficulty(t);
+            } else if(diff.equals("Medium")){
+                t = new MedDifficulty(t);
+            } if(diff.equals("Hard")){
+                t = new HardDifficulty(t);
+            }
+
+            return this;
+        }
         public Builder deadline(Calendar cal){
             t.setDeadline(cal);
             return this;
         }
 
-        public Builder priority(int p){
-            t.setPriority(p);
+        public Builder priority(String p){
+            if(p.contains("1"))
+                t.setPriority(1);
+            else if(p.contains("2"))
+                 t.setPriority(2);
+            else t.setPriority(3);
             return this;
         }
 
@@ -57,7 +71,7 @@ public class TaskBuilder {
         return this.t;
     }
 
-    public void setNotification() {
+    public static void setNotification(Context c, Task t) {
         int id =  (int) System.currentTimeMillis();
 
         Intent intent = new Intent(c, NotificationMaker.class);

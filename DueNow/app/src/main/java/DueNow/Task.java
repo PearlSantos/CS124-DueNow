@@ -32,7 +32,6 @@ public class Task {
     private final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
 
     public final String uniqueId = Integer.toString((int) System.currentTimeMillis());
-    protected Context c;
     protected String name; // given by user
     protected String description; //given by user
     protected Calendar deadline; //given by user
@@ -43,13 +42,8 @@ public class Task {
     protected Calendar recommendedTimeFinish; // dynamically created
     protected int timeInterval = 0; // in minutes, total time user worked on task
     protected int timeNeeded; // timeNeeded is in minutes
-    protected State state = new NotStartedState(this);
+    protected String state = "NotStartedState";
 
-
-
-    public void setC(Context c) {
-        this.c = c;
-    }
 
     public String getName() {
         return name;
@@ -97,7 +91,6 @@ public class Task {
 
     public void setRecommendedStartTime(Calendar recommendedStartTime) {
         this.recommendedStartTime = recommendedStartTime;
-        setNotification();
     }
 
     public Calendar getRecommendedTimeFinish() {
@@ -125,11 +118,11 @@ public class Task {
     public void setTimeNeeded(int timeNeeded){
         this.timeNeeded = timeNeeded;}
 
-    public State getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public void setState(String state) {
         this.state = state;
     }
 
