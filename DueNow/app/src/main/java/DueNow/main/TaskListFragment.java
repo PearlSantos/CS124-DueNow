@@ -1,12 +1,15 @@
 package duenow.main;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -72,6 +75,7 @@ public class TaskListFragment extends Fragment implements Observer {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.container = container;
+        final SharedPreferences taskInfo = getActivity().getSharedPreferences("TASKS", Context.MODE_PRIVATE);
 //        ArrayList<Item> items = new ArrayList<>();
 //        items.add(new SectionItem("Monday"));
 //        items.add(new EntryItem("Hi","Hi","Hi"));
@@ -88,6 +92,24 @@ public class TaskListFragment extends Fragment implements Observer {
         this.listView = taskList;
         // taskList.setAdapter(new CustomMainAdapter(this.getContext(), taskName, dateStart, deadline));
         taskList.setAdapter(new EntryAdapter(this.getContext(), ListOfTasks.getList()));
+        taskList.setOnItemClickListener(new ListView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Task t = ListOfTasks.getList().get(position);
+                SharedPreferences.Editor ed = taskInfo.edit();
+                ed.putString("task name", t.getName());
+                ed.putString("task desc", t.getDescription());
+                ed.putString("task deadline", t.getDeadline().toString());
+                ed.putInt("task priority", t.getPriority());
+                //ed.putString("state", t.getState());
+                ed.putString("recommended start time", t.getRecommendedStartTime().toString());
+                ed.commit();
+                Intent i = new Intent(getActivity(), ViewTaskActivity.class);
+                startActivity(i);
+                //ed.putString("task difficulty", t.getDifficulty());
+
+            }
+        });
         return rootView;
     }
 

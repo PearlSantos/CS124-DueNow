@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="duenow.decoratorfactory">
 
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
@@ -12,60 +12,57 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--<meta-data-->
-            <!--android:name="com.facebook.FacebookActivity"-->
-            <!--android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
-            <!--android:label="@string/app_name" />-->
 
-        <!--<meta-data-->
-            <!--android:name="com.facebook.sdk.ApplicationId"-->
-            <!--android:value="@string/facebook_app_id" />-->
-        <!--<meta-data-->
-            <!--android:name="com.firebase.ui.TwitterKey"-->
-            <!--android:value="@string/twitter_app_key" />-->
-        <!--<meta-data-->
-            <!--android:name="com.firebase.ui.TwitterSecret"-->
-            <!--android:value="@string/twitter_app_secret" />-->
+        <!-- <meta-data -->
+        <!-- android:name="com.facebook.FacebookActivity" -->
+        <!-- android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation" -->
+        <!-- android:label="@string/app_name" /> -->
+
+
+        <!-- <meta-data -->
+        <!-- android:name="com.facebook.sdk.ApplicationId" -->
+        <!-- android:value="@string/facebook_app_id" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="com.firebase.ui.TwitterKey" -->
+        <!-- android:value="@string/twitter_app_key" /> -->
+        <!-- <meta-data -->
+        <!-- android:name="com.firebase.ui.TwitterSecret" -->
+        <!-- android:value="@string/twitter_app_secret" /> -->
 
         <activity
             android:name="duenow.main.MainActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustPan"
-			android:parentActivityName="duenow.main.AddTaskActivity">
+            android:parentActivityName="duenow.main.AddTaskActivity"
+            android:windowSoftInputMode="adjustPan">
 
         </activity>
-
         <activity
             android:name="duenow.main.LoginActivity"
-            android:label="@string/title_activity_login">
-        </activity>
-
-
-        <activity android:name="duenow.notifications.NotifyUser"
-            android:label="NotifyUser">
-        </activity>
+            android:label="@string/title_activity_login"></activity>
+        <activity
+            android:name="duenow.notifications.NotifyUser"
+            android:label="NotifyUser"></activity>
 
         <receiver
-            android:process=":remote"
-            android:name="duenow.notifications.NotificationMaker">
-            </receiver>
-
+            android:name="duenow.notifications.NotificationMaker"
+            android:process=":remote"></receiver>
         <receiver
-            android:process=":remote"
-            android:name="duenow.notifications.NotificationReceiver">
-        </receiver>
-		<activity
+            android:name="duenow.notifications.NotificationReceiver"
+            android:process=":remote"></receiver>
+
+        <activity
             android:name="duenow.main.AddTaskActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustPan"
-			android:parentActivityName="duenow.main.MainActivity">
+            android:parentActivityName="duenow.main.MainActivity"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name="duenow.main.ViewTaskActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
 
+        </activity>
     </application>
 
 </manifest>
