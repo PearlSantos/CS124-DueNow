@@ -5,7 +5,10 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import duenow.decoratorfactory.difficulty.EasyDifficulty;
 import duenow.decoratorfactory.difficulty.HardDifficulty;
@@ -47,8 +50,18 @@ public class TaskBuilder {
 
             return this;
         }
-        public Builder deadline(Calendar cal){
-            t.setDeadline(cal);
+        public Builder deadline(String cal){
+           // final SimpleDateFormat f = new SimpleDateFormat("MMMMM d, hh:mm a");
+            final SimpleDateFormat f = new SimpleDateFormat("MMMMM d, yyyy");
+            Date date = null;
+            try {
+                 date = f.parse(cal);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            Calendar deadline = Calendar.getInstance();
+            deadline.setTime(date);
+            t.setDeadline(deadline);
             return this;
         }
 

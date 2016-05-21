@@ -30,15 +30,15 @@ public class CodeReuse {
         ft.commit();
     }
 
-    public static void refreshList(String state, ListView listview, Context c){
-        ArrayList<Task> list = ListOfTasks.getList();
-        ArrayList<Task> newList= new ArrayList<>();
-        for(Task e: list){
-            if(e.getState().equals(state)){
-                newList.add(e);
-            }
-        }
-
-        listview.setAdapter(new EntryAdapter(c, newList));
-    }
+//    public static void refreshList(String state, ListView listview, Context c){
+//        ArrayList<Task> list = ListOfTasks.getList();
+//        ArrayList<Task> newList= new ArrayList<>();
+//        for(Task e: list){
+//            if(e.getState().equals(state)){
+//                newList.add(e);
+//            }
+//        }
+//
+//        listview.setAdapter(new EntryAdapter(c, newList));
+//    }
 }

@@ -65,6 +65,9 @@ public class PostponedTasks extends Fragment implements Observer {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ListOfTasks l = new ListOfTasks();
+        l.addObserver(this);
+        l.notifyObservers();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -81,7 +84,9 @@ public class PostponedTasks extends Fragment implements Observer {
 
         ListView taskList = (ListView) rootView.findViewById(R.id.main_listview);
         // taskList.setAdapter(new CustomMainAdapter(this.getContext(), taskName, dateStart, deadline));
-        taskList.setAdapter(new EntryAdapter(this.getContext(), ListOfTasks.getList()));
+
+        ListOfTasks l = new ListOfTasks();
+        taskList.setAdapter(new EntryAdapter(this.getContext(), l.getList("PostponedState")));
         return rootView;
     }
 
@@ -101,8 +106,10 @@ public class PostponedTasks extends Fragment implements Observer {
     @Override
     public void update(Observable observable, Object data) {
         CodeReuse.refresh(this, container);
-        CodeReuse.refreshList("PostponedState", listView, this.getContext());
-
+        if (listView != null) {
+            ListOfTasks l = new ListOfTasks();
+            listView.setAdapter(new EntryAdapter(this.getContext(), l.getList("PostponedState")));
+        }
     }
 
     /**

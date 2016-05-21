@@ -25,44 +25,24 @@ public class ListOfTasks extends Observable {
     public static final SimpleDateFormat f = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
     public static final Firebase ref = new Firebase("https://cs124duenow.firebaseio.com/tasks");
 
-    private static ArrayList<Task>  list = new ArrayList<>();
     private static Task t;
-    public static ArrayList<Task> getList(){
+    public ArrayList<Task> getList(){
+        final ArrayList<Task> list = new ArrayList<>();
+        if(!list.isEmpty()) {
+            for (Task ta : list) {
+                System.out.println("CHECK: START" + ta.getName());
+            }
+        }
+
         Query queryRef = ref.orderByKey();
         queryRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-      //          Task task = snapshot.getValue(Task.class);
                 Map<String, Object> map = snapshot.getValue(Map.class);
-//                String lol = "";
-//                try {
-//                    lol = new ObjectMapper().writeValueAsString(map);
-//                } catch (JsonProcessingException e) {
-//                    e.printStackTrace();
-//                }
                System.out.println("CHECK: MAP" + map);
-//                Task task = null;
-//                try {
-//                    task = new ObjectMapper().readValue(lol, new TypeReference<Task>(){});
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
                 Task task = new ObjectMapper().convertValue(map, Task.class);
-                System.out.println(snapshot.child("state").getValue());
-//                State s = null;
-//                try {
-//                    s = new ObjectMapper().readValue((String)snapshot.child("state").getValue(), new TypeReference<State>(){});
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                Task task = new Task();
-//                t.setName((String)map.get("name"));
-//                t.setDescription((String) map.get("description"));
-//                t.setPriority((int) map.get("priority"));
-//                t.setDeadline((Calendar) map.get("deadline"));
-
-
                 list.add(task);
+                System.out.println("CHECK: LIST SIZE " + list.size());
             }
 
             @Override
@@ -89,9 +69,47 @@ public class ListOfTasks extends Observable {
 
         if(!list.isEmpty()) {
             for (Task ta : list) {
-                System.out.println(ta.getName());
+                System.out.println("CHECK: END" + ta.getName());
             }
         }
+        return list;
+    }
+
+
+    public ArrayList<Task> getList(String state) {
+        final ArrayList<Task> list = new ArrayList<>();
+        Query queryRef = ref.orderByChild("state").equalTo(state, "state");
+        queryRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                Map<String, Object> map = snapshot.getValue(Map.class);
+                System.out.println("CHECK: MAP" + map);
+                Task task = new ObjectMapper().convertValue(map, Task.class);
+                System.out.println(snapshot.child("state").getValue());
+                list.add(task);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+            // ....
+        });
         return list;
     }
 
@@ -131,9 +149,9 @@ public class ListOfTasks extends Observable {
     static Map<String, Object> taskMap;
     static Firebase specTask;
     public void updateFirebase(Task t){
-        this.addObserver(TaskListFragment.newInstance());
-        this.addObserver(PostponedTasks.newInstance());
-        this.addObserver(FinishedTasks.newInstance());
+//        this.addObserver(TaskListFragment.newInstance());
+//        this.addObserver(PostponedTasks.newInstance());
+//        this.addObserver(FinishedTasks.newInstance());
 
         ObjectMapper map = new ObjectMapper();
         taskMap = map.convertValue(t, Map.class);
@@ -145,7 +163,7 @@ public class ListOfTasks extends Observable {
 //        }
         //  specTask = ref.child(t.uniqueId);
        // specTask.setValue(taskMap);
-        ref.child(t.uniqueId).setValue(taskMap);
+        ref.child(t.uniqueId).updateChildren(taskMap);
         System.out.println("CHECK: SAVED TO FIREBASE");
         this.notifyObservers();
     }

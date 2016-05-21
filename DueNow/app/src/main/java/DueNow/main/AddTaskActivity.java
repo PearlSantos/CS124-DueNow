@@ -108,60 +108,6 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         final SharedPreferences prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
         final SharedPreferences taskTypePrefs = getSharedPreferences(PREFS2, Context.MODE_PRIVATE);
 
-		Button save = (Button) findViewById(R.id.saveButton);
-
-		save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor ed = prefs.edit();
-                EditText taskName = (EditText) findViewById(R.id.newTaskName);
-                EditText taskDesc = (EditText) findViewById(R.id.taskDescription);
-                if(taskName.getText().toString().matches("")){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(con);
-                    builder.setMessage("Please indicate your task's name");
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                }else{
-                    ed.putString("taskName", taskName.getText().toString());
-                    ed.putString("taskType", taskChoice);
-                    ed.putString("deadline", dateChoice);
-                    ed.putString("priority", priorityChoice);
-                    ed.putString("difficulty", difficultyChoice);
-                    if(!taskDesc.getText().toString().matches("")){
-                        ed.putString("taskDesc", taskDesc.getText().toString());
-                    }
-
-                    ed.commit();
-                    Toast toast = Toast.makeText(con, "Task added successfully.", Toast.LENGTH_LONG);
-                    toast.show();
-
-                    AbstractTaskFactory fp = FactoryProducer.getFactory("School");
-                    Task t = fp.createSchoolTask(taskChoice, 0);
-
-
-                    Calendar deadline3 = new GregorianCalendar();
-                    deadline3.set(2016, 4, 2, 13, 30);
-
-
-                    TaskBuilder buildTask = new TaskBuilder.Builder(t).difficulty(difficultyChoice)
-                            .name(taskName.getText().toString())
-                            .description(taskDesc.getText().toString())
-                            .priority(priorityChoice)
-                            .build();
-                    t = buildTask.createTask();
-                    OrganizingTasks o = new OrganizingTasks();
-                    o.addTask(t);
-
-                    buildTask.setNotification(getApplicationContext(), t);
-
-                    ListOfTasks l = new ListOfTasks();
-                    l.updateFirebase(t);
-
-                    finish();
-                }
-			}
-		});
-
         final ArrayList<String> task_types;
         Set<String> set2 = taskTypePrefs.getStringSet("task types", null);
         if(set2 != null){
@@ -192,7 +138,7 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         difficulty.add("Medium");
         difficulty.add("Hard");
 
-        Spinner taskType = (Spinner) findViewById(R.id.task_type);
+        final Spinner taskType = (Spinner) findViewById(R.id.task_type);
 		taskChoice = launchDialog(taskType, task_types);
 		
 		LinearLayout dueDate = (LinearLayout) findViewById(R.id.due_date);
@@ -213,14 +159,68 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
             }
         });
 		
-		Spinner priorityClick = (Spinner) findViewById(R.id.priority_click);
+		final Spinner priorityClick = (Spinner) findViewById(R.id.priority_click);
         priorityChoice =launchDialog(priorityClick, priority);
         
 		
-		Spinner difficultyLevel = (Spinner) findViewById(R.id.difficulty_level);
+		final Spinner difficultyLevel = (Spinner) findViewById(R.id.difficulty_level);
         difficultyChoice =launchDialog(difficultyLevel, difficulty);
-		
-		
+
+        Button save = (Button) findViewById(R.id.saveButton);
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor ed = prefs.edit();
+                EditText taskName = (EditText) findViewById(R.id.newTaskName);
+                EditText taskDesc = (EditText) findViewById(R.id.taskDescription);
+                if(taskName.getText().toString().matches("")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(con);
+                    builder.setMessage("Please indicate your task's name");
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }else{
+                    ed.putString("taskName", taskName.getText().toString());
+                    ed.putString("taskType", taskChoice);
+                    ed.putString("deadline", dateChoice);
+                    ed.putString("priority", priorityChoice);
+                    ed.putString("difficulty", difficultyChoice);
+                    if(!taskDesc.getText().toString().matches("")){
+                        ed.putString("taskDesc", taskDesc.getText().toString());
+                    }
+
+                    ed.commit();
+                    Toast toast = Toast.makeText(con, "Task added successfully.", Toast.LENGTH_LONG);
+                    toast.show();
+
+                    AbstractTaskFactory fp = FactoryProducer.getFactory("School");
+                    Task t = fp.createSchoolTask((String)taskType.getSelectedItem(), 0);
+
+
+                    Calendar deadline3 = new GregorianCalendar();
+                    deadline3.set(2016, 4, 2, 13, 30);
+
+
+                    TaskBuilder buildTask = new TaskBuilder.Builder(t).difficulty((String)difficultyLevel.getSelectedItem())
+                            .name(taskName.getText().toString())
+                            .description(taskDesc.getText().toString())
+                            .priority((String)priorityClick.getSelectedItem())
+                            .deadline(((TextView)findViewById(R.id.deadline)).getText().toString())
+                            .build();
+                    t = buildTask.createTask();
+                    OrganizingTasks o = new OrganizingTasks();
+                     o.addTask(t);
+
+                    //buildTask.setNotification(getApplicationContext(), t);
+
+                    ListOfTasks l = new ListOfTasks();
+                    l.updateFirebase(t);
+
+                    finish();
+                }
+            }
+        });
+
     }
 
     @Override
@@ -265,32 +265,31 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
         final Context appCon = this;
 		spin.setAdapter(new ArrayAdapter<String>(AddTaskActivity.this, R.layout.dropdown_item, list));
 		spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        choice = (String) parent.getItemAtPosition(position);
-                        //final SharedPreferences prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
-                        if (choice.equals("Custom")) {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                choice = (String) parent.getItemAtPosition(position);
+                //final SharedPreferences prefs = getSharedPreferences(PREFS, Context.MODE_PRIVATE);
+                if (choice.equals("Custom")) {
 
-                            final Dialog dialog = new Dialog(appCon);
-                            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                            dialog.setContentView(R.layout.layout_custom_task_type);
+                    final Dialog dialog = new Dialog(appCon);
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                    dialog.setContentView(R.layout.layout_custom_task_type);
 
-                            final Button done = (Button) dialog.findViewById(R.id.ok);
-                            done.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    final EditText customTaskType = (EditText) dialog.findViewById(R.id.custom_task_type);
-                                    choice = customTaskType.getText().toString();
+                    final Button done = (Button) dialog.findViewById(R.id.ok);
+                    done.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            final EditText customTaskType = (EditText) dialog.findViewById(R.id.custom_task_type);
+                            choice = customTaskType.getText().toString();
 //                                    SharedPreferences.Editor ed = prefs.edit();
 //                                    ed.putString("choice", newTaskType);
 //                                    ed.commit();
-                                    dialog.dismiss();
-                                }
-                            });
-
-                            dialog.show();
-
+                            dialog.dismiss();
                         }
+                    });
+
+                    dialog.show();
+                }
 //                        else {
 //                            SharedPreferences.Editor ed = prefs.edit();
 //                            ed.putString("choice", choice);
@@ -299,20 +298,19 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 //                        }
 
 
-                    }
+            }
 
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                        //dialog.dismiss();
-                        //close dialog fragment
-                    }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //dialog.dismiss();
+                //close dialog fragment
+            }
 
 
-                });
+        });
+        System.out.println("CHECK: " + choice);
         return choice;
 	}
-	
-	 
 }
 
 
