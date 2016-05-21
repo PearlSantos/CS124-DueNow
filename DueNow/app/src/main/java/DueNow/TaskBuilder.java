@@ -1,25 +1,21 @@
 package duenow;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 
 import java.util.Calendar;
+
+import duenow.notifications.NotificationMaker;
 
 /**
  * Created by elysi on 5/21/2016.
  */
 public class TaskBuilder {
     protected Task t;
-    protected Context c;
-    protected String name; // given by user
-    protected String description; //given by user
-    protected Calendar deadline; //given by user
-    protected int priority;
     private TaskBuilder(Builder builder) {
-        this.c = builder.c;
-        this.name = builder.name;
-        this.description = builder.description;
-        this.deadline = builder.deadline;
-        this.priority = builder.priority;
+        this.t = builder.t;
     }
     public static class Builder{
         protected Task t;
@@ -47,13 +43,34 @@ public class TaskBuilder {
         }
 
         public Builder priority(int p){
-            this.priority = p;
+            t.setPriority(p);
             return this;
         }
 
-        public Task build(){
-            return new Task(this);
+        public TaskBuilder build(){
+            return new TaskBuilder(this);
         }
+
+    }
+
+    public Task createTask(){
+        return this.t;
+    }
+
+    public void setNotification() {
+        int id =  (int) System.currentTimeMillis();
+
+        Intent intent = new Intent(c, NotificationMaker.class);
+        intent.putExtra("ID", id);
+        //     intent.putExtra("TASK", testT);
+
+        PendingIntent pe = PendingIntent.getBroadcast(c, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pe);
+
+        alarmManager.set(AlarmManager.RTC_WAKEUP, t.getRecommendedStartTime().getTimeInMillis(), pe);
+
+        System.out.println("CHECK: ALARM MANAGER");
     }
 
 }

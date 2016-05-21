@@ -140,20 +140,4 @@ public class Task {
     public void setPriority(int priority) {
         this.priority = priority;
     }
-
-    public void setNotification() {
-        int id =  (int) System.currentTimeMillis();
-
-        Intent intent = new Intent(c, NotificationMaker.class);
-        intent.putExtra("ID", id);
-        //     intent.putExtra("TASK", testT);
-
-        PendingIntent pe = PendingIntent.getBroadcast(c, id, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager)c.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(pe);
-
-        alarmManager.set(AlarmManager.RTC_WAKEUP, recommendedStartTime.getTimeInMillis(), pe);
-
-        System.out.println("CHECK: ALARM MANAGER");
-    }
 }

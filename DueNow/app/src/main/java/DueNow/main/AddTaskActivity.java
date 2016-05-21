@@ -26,7 +26,12 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
+import duenow.ListOfTasks;
+import duenow.Task;
+import duenow.decoratorfactory.AbstractTaskFactory;
+import duenow.decoratorfactory.FactoryProducer;
 import duenow.decoratorfactory.R;
 
 public class AddTaskActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -50,15 +55,32 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_new_task);
-		
 
-		
 		Button save = (Button) findViewById(R.id.saveButton);
 		save.setOnClickListener(new View.OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				//save your shit here
-			}
+                AbstractTaskFactory fp = FactoryProducer.getFactory("School");
+                Task t = fp.createSchoolTask("Homework", 0);
+
+                EditText taskName = (EditText) rootView.findViewById(R.id.taskName);
+                EditText taskDescription = (EditText) rootView.findViewById(R.id.taskName);
+
+                Calendar deadline3 = new GregorianCalendar();
+                deadline3.set(2016, 4, 2, 13, 30);
+
+                t.setDeadline(deadline3);
+                t.setC(getContext());
+                t.setName(taskName.getText().toString());
+                t.setDescription(taskDescription.getText().toString());
+
+                // OrganizingTasks o = new OrganizingTasks();
+                // o.addTask(t);
+
+                ListOfTasks l = new ListOfTasks();
+                l.updateFirebase(t);
+
+            }
 		});
 		
 		final ArrayList<String> task_types = new ArrayList<>();

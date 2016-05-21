@@ -91,25 +91,6 @@ public class AddTaskFragment extends Fragment {
                 ((Button) rootView.findViewById(R.id.testSave)).setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        AbstractTaskFactory fp = FactoryProducer.getFactory("School");
-                        Task t = fp.createSchoolTask("Homework", 0);
-
-                        EditText taskName = (EditText) rootView.findViewById(R.id.taskName);
-                        EditText taskDescription = (EditText) rootView.findViewById(R.id.taskName);
-
-                        Calendar deadline3 = new GregorianCalendar();
-                        deadline3.set(2016, 4, 2, 13, 30);
-
-                        t.setDeadline(deadline3);
-                        t.setC(getContext());
-                        t.setName(taskName.getText().toString());
-                        t.setDescription(taskDescription.getText().toString());
-
-                       // OrganizingTasks o = new OrganizingTasks();
-                       // o.addTask(t);
-
-                        ListOfTasks l = new ListOfTasks();
-                        l.updateFirebase(t);
 
                     }
                 });
