@@ -41,6 +41,7 @@ public class Task {
         this.difficulty = difficulty;
     }
 
+    protected String type;
     protected String difficulty;
     protected String name; // given by user
     protected String description; //given by user
@@ -142,5 +143,13 @@ public class Task {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

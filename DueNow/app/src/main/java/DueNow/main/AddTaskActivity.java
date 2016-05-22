@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -121,61 +122,6 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
         Button save = (Button) findViewById(R.id.saveButton);
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences.Editor ed = prefs.edit();
-                EditText taskName = (EditText) findViewById(R.id.newTaskName);
-                EditText taskDesc = (EditText) findViewById(R.id.taskDescription);
-                if (taskName.getText().toString().matches("")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(con);
-                    builder.setMessage("Please indicate your task's name");
-                    builder.setPositiveButton("OK", null);
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                } else {
-                    ed.putString("taskName", taskName.getText().toString());
-                    ed.putString("taskType", taskChoice);
-                    ed.putString("deadline", dateChoice);
-                    ed.putString("priority", priorityChoice);
-                    ed.putString("difficulty", difficultyChoice);
-                    if (!taskDesc.getText().toString().matches("")) {
-                        ed.putString("taskDesc", taskDesc.getText().toString());
-                    }
-
-                    ed.commit();
-                    Toast toast = Toast.makeText(con, "Task added successfully.", Toast.LENGTH_LONG);
-                    toast.show();
-
-                    AbstractTaskFactory fp = FactoryProducer.getFactory("School");
-                    Task t = fp.createSchoolTask(taskChoice, 0);
-
-
-                    Calendar deadline3 = new GregorianCalendar();
-                    deadline3.set(2016, 4, 2, 13, 30);
-
-
-                    TaskBuilder buildTask = new TaskBuilder.Builder(t).difficulty(difficultyChoice)
-                            .name(taskName.getText().toString())
-                            .description(taskDesc.getText().toString())
-                            .priority(priorityChoice)
-                            .deadline(((TextView)findViewById(R.id.deadline)).getText().toString())
-                            .difficultyName(difficultyChoice)
-                            .build();
-                    t = buildTask.createTask();
-
-                    OrganizingTasks o = new OrganizingTasks();
-                    o.addTask(t);
-
-                    buildTask.setNotification(getApplicationContext(), t);
-
-                    ListOfTasks l = new ListOfTasks();
-                    l.updateFirebase(t);
-
-                    finish();
-                }
-            }
-        });
 
         final ArrayList<String> task_types;
         Set<String> set2 = taskTypePrefs.getStringSet("task types", null);
@@ -243,6 +189,64 @@ public class AddTaskActivity extends AppCompatActivity implements DatePickerDial
 
         final Spinner difficultyLevel = (Spinner) findViewById(R.id.difficulty_level);
         difficultyChoice = launchDialog(difficultyLevel, difficulty);
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences.Editor ed = prefs.edit();
+                EditText taskName = (EditText) findViewById(R.id.newTaskName);
+                EditText taskDesc = (EditText) findViewById(R.id.taskDescription);
+                if (taskName.getText().toString().matches("")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(con);
+                    builder.setMessage("Please indicate your task's name");
+                    builder.setPositiveButton("OK", null);
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                } else {
+                    ed.putString("taskName", taskName.getText().toString());
+                    ed.putString("taskType", taskChoice);
+                    ed.putString("deadline", dateChoice);
+                    ed.putString("priority", priorityChoice);
+                    ed.putString("difficulty", difficultyChoice);
+                    if (!taskDesc.getText().toString().matches("")) {
+                        ed.putString("taskDesc", taskDesc.getText().toString());
+                    }
+
+                    ed.commit();
+                    Toast toast = Toast.makeText(con, "Task added successfully.", Toast.LENGTH_LONG);
+                    toast.show();
+
+                    AbstractTaskFactory fp = FactoryProducer.getFactory("School");
+                    Task t = fp.createSchoolTask(taskType.getSelectedItem().toString(), 0);
+
+
+                    Calendar deadline3 = new GregorianCalendar();
+                    deadline3.set(2016, 4, 2, 13, 30);
+
+
+                    TaskBuilder buildTask = new TaskBuilder.Builder(t).difficulty(difficultyLevel.getSelectedItem().toString())
+                            .name(taskName.getText().toString())
+                            .type(taskType.getSelectedItem().toString())
+                            .description(taskDesc.getText().toString())
+                            .priority(priorityClick.getSelectedItem().toString())
+                            .deadline(((TextView)findViewById(R.id.deadline)).getText().toString())
+                            .difficultyName(difficultyLevel.getSelectedItem().toString())
+                            .build();
+                    t = buildTask.createTask();
+
+                    OrganizingTasks o = new OrganizingTasks();
+                    o.addTask(t);
+
+                    buildTask.setNotification(getApplicationContext(), t);
+
+                    ListOfTasks l = new ListOfTasks();
+                    l.updateFirebase(t);
+                    Intent i = new Intent(AddTaskActivity.this, MainActivity.class);
+
+                    startActivity(i);
+                    finish();
+                }
+            }
+        });
 
 
     }

@@ -6,6 +6,7 @@ package duenow.decoratorfactory.tasktype;
  */
 public class Paper extends SchoolTask {
     public Paper(){
+        this.type = "Paper";
         this.timeNeeded = 180;
     }
 

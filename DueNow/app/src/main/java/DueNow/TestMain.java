@@ -5,9 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.firebase.client.Firebase;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -21,7 +23,7 @@ import duenow.decoratorfactory.tasktype.Homework;
 /**
  * Created by elysi on 4/16/2016.
  */
-public class TestMain extends AppCompatActivity{
+public class TestMain extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,17 @@ public class TestMain extends AppCompatActivity{
     }
 
     public static void main(String args[]) {
+        String date = "May 22, 2016, 9:30";
+        final SimpleDateFormat f = new SimpleDateFormat("MMMMM d, yyyy, H:mm");
+        Date today = null;
+        try {
+            today = f.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
+        final SimpleDateFormat f2 = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
+        System.out.println("TODAY" + f2.format(today));
 
 //        final SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, EEE, hh:mm a");
 //        TaskSimpleFactory f = new TaskSimpleFactory();

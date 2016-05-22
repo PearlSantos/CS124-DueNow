@@ -93,20 +93,24 @@ public class TaskListFragment extends Fragment implements Observer {
 
         // taskList.setAdapter(new CustomMainAdapter(this.getContext(), taskName, dateStart, deadline));
         ListOfTasks l = new ListOfTasks();
+        l.addObserver(this);
         taskList.setAdapter(new EntryAdapter(this.getContext(), l.getList()));
         taskList.setOnItemClickListener(new ListView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ListOfTasks l = new ListOfTasks();
                 Task t = l.getList().get(position);
+                System.out.println("CHECK: POSTION" + position);
+
                 SharedPreferences.Editor ed = taskInfo.edit();
-                ed.putString("task name", t.getName());
-                ed.putString("task desc", t.getDescription());
-                ed.putString("task deadline", t.getDeadline().toString());
-                ed.putInt("task priority", t.getPriority());
-                //ed.putString("state", t.getState());
-                ed.putString("recommended start time", t.getRecommendedStartTime().toString());
-                ed.putString("task difficulty", t.getDifficulty());
+                ed.putString("unique", t.uniqueId);
+//                ed.putString("task name", t.getName());
+//                ed.putString("task desc", t.getDescription());
+//                ed.putString("task deadline", t.getDeadline().toString());
+//                ed.putInt("task priority", t.getPriority());
+//                //ed.putString("state", t.getState());
+//                ed.putString("recommended start time", t.getRecommendedStartTime().toString());
+//                ed.putString("task difficulty", t.getDifficulty());
                 ed.commit();
                 Intent i = new Intent(getActivity(), ViewTaskActivity.class);
                 startActivity(i);

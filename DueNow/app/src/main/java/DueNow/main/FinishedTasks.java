@@ -86,6 +86,7 @@ public class FinishedTasks extends Fragment implements Observer {
         // taskList.setAdapter(new CustomMainAdapter(this.getContext(), taskName, dateStart, deadline));
 
         ListOfTasks l = new ListOfTasks();
+        l.addObserver(this);
         taskList.setAdapter(new EntryAdapter(this.getContext(), l.getList("FinishedState")));
         return rootView;
     }

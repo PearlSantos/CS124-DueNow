@@ -5,6 +5,7 @@ package duenow.decoratorfactory.tasktype;
  */
 public class Dinner extends PersonalTask {
     public Dinner(){
+        this.type = "Dinner";
         this.timeNeeded = 180;
     }
 }

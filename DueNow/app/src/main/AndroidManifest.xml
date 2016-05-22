@@ -34,11 +34,11 @@
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan"
 			android:parentActivityName="duenow.main.AddTaskActivity">
-           <!--  <intent-filter>
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>  -->
+            </intent-filter>
 
         </activity>
         <activity
@@ -59,13 +59,9 @@
             android:name="duenow.main.AddTaskActivity"
             android:label="@string/app_name"
             android:parentActivityName="duenow.main.MainActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan">
+            </activity>
         <activity android:name="duenow.main.ViewTaskActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
     </application>

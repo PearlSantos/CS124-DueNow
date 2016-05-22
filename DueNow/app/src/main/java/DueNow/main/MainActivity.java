@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         list.setOnItemClickListener(new DrawerItemClickListener());
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.content_frame, new TaskListFragment()).commit();
+        fragmentManager.beginTransaction().replace(R.id.content_frame, TaskListFragment.newInstance()).commit();
 		
 //		Button save = (Button) root.findViewById(R.id.saveButton);
 //		save.setVisibility(View.GONE);
@@ -87,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
     public void launchAddTask(){
         Intent i = new Intent(this, AddTaskActivity.class);
         startActivity(i);
+        finish();
     }
 
     @Override
@@ -125,19 +126,19 @@ public class MainActivity extends AppCompatActivity {
 
             switch(position){
                 case 0:
-                    fragment = new TaskListFragment();
+                    fragment = TaskListFragment.newInstance();
                     root.toggleMenu();
                     break;
                 case 1:
-                    fragment = new PostponedTasks(); //must be PostponedTasks
+                    fragment = PostponedTasks.newInstance(); //must be PostponedTasks
                     root.toggleMenu();
                     break;
                 case 2:
-                    fragment = new FinishedTasks(); //finished tasks
+                    fragment = FinishedTasks.newInstance(); //finished tasks
                     root.toggleMenu();
                     break;
                 case 3:
-                    fragment = new TaskListFragment(); //AccountSettings
+                    fragment = TaskListFragment.newInstance(); //AccountSettings
                     root.toggleMenu();
                     break;
                 case 4:

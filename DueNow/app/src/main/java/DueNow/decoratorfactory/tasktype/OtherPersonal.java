@@ -7,6 +7,7 @@ import duenow.Task;
  */
 public class OtherPersonal extends PersonalTask {
     public OtherPersonal(int tN) {
+        this.type = "Other Personal";
         this.timeNeeded = tN;
     }
 }

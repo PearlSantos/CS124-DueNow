@@ -7,6 +7,7 @@ import duenow.Task;
  */
 public class Orals extends SchoolTask {
     public Orals(){
+        this.type = "Orals";
         this.timeNeeded = 150;
     }
 }

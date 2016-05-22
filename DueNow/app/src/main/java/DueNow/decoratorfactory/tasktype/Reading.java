@@ -7,6 +7,7 @@ import duenow.Task;
  */
 public class Reading extends SchoolTask {
     public Reading(){
+        this.type = "Reading";
         this.timeNeeded = 60;
     }
 }

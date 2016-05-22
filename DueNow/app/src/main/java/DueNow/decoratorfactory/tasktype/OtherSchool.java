@@ -7,6 +7,7 @@ import duenow.Task;
  */
 public class OtherSchool extends SchoolTask {
     public OtherSchool(int tN) {
+        this.type = "Other School";
         this.timeNeeded = tN;
     }
 }

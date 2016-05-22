@@ -7,6 +7,7 @@ import duenow.Task;
  */
 public class LongTest extends SchoolTask {
     public LongTest(){
+        this.type = "Long Test";
         this.timeNeeded = 120;
     }
 }

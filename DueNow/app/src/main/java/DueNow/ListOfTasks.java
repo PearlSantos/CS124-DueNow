@@ -12,8 +12,10 @@ import com.firebase.client.ValueEventListener;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
+import java.util.Observer;
 
 import duenow.main.FinishedTasks;
 import duenow.main.PostponedTasks;
@@ -27,18 +29,40 @@ public class ListOfTasks extends Observable {
     public static final Firebase ref = new Firebase("https://cs124duenow.firebaseio.com/tasks");
 
     private static Task t;
+    static int i;
+    static int repeats = 0;
     public static ArrayList<Task> list = new ArrayList<>();
 
+    public static ArrayList<Task> list2 = new ArrayList<>();
+
+    public ListOfTasks(){
+
+    }
+    public static int numOfTask(){
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                i = (int) dataSnapshot.getChildrenCount();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+        return i;
+    }
     public static ArrayList<Task> getList(){
         Query queryRef = ref.orderByKey();
+        repeats++;
         queryRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot snapshot, String previousChild) {
                 Map<String, Object> map = snapshot.getValue(Map.class);
                 System.out.println("CHECK: MAP" + map);
-                t = new ObjectMapper().convertValue(map, Task.class);
+                Task t = new ObjectMapper().convertValue(map, Task.class);
                 list.add(t);
-                System.out.println("CHECK: LIST SIZE " + list.size());
             }
 
             @Override
@@ -62,13 +86,30 @@ public class ListOfTasks extends Observable {
             }
         });
 
+
         System.out.println("CHECK: END LIST SIZE" + list.size());
-        if(!list.isEmpty()) {
+        ArrayList<Task> newList = new ArrayList<>();
+        int j = 0;
+        while(j < list.size()){
+            Task t = list.get(j);
+            for(int k = 0; k < list.size(); k++) {
+                if(k >= newList.size()){
+                    newList.add(t);
+                    break;
+                } else if(t.getName().equals(newList.get(k).getName())){
+                    break;
+                }
+            }
+            j++;
+        }
+        System.out.println("CHECK: END i " + i);
+        System.out.println("CHECK: END NEWLIST SIZE" + newList.size());
+        if(!newList.isEmpty()) {
             for (Task ta : list) {
                 System.out.println("CHECK: END" + ta.getName());
             }
         }
-        return list;
+        return newList;
     }
 
 
@@ -81,7 +122,7 @@ public class ListOfTasks extends Observable {
                 System.out.println("CHECK: MAP" + map);
                 Task task = new ObjectMapper().convertValue(map, Task.class);
                 System.out.println(snapshot.child("state").getValue());
-                list.add(task);
+                list2.add(task);
             }
 
             @Override
@@ -105,42 +146,74 @@ public class ListOfTasks extends Observable {
             }
             // ....
         });
-        return list;
+
+        System.out.println("CHECK: END LIST SIZE" + list2.size());
+        ArrayList<Task> newList = new ArrayList<>();
+        int j = 0;
+        while(j < list2.size()){
+            Task t = list2.get(j);
+            for(int k = 0; k < list2.size(); k++) {
+                if(k >= newList.size()){
+                    newList.add(t);
+                    break;
+                } else if(t.getName().equals(newList.get(k).getName())){
+                    break;
+                }
+            }
+            j++;
+        }
+        System.out.println("CHECK: END i " + i);
+        System.out.println("CHECK: END NEWLIST SIZE" + newList.size());
+        if(!newList.isEmpty()) {
+            for (Task ta : list2) {
+                System.out.println("CHECK: END" + ta.getName());
+            }
+        }
+        return newList;
     }
 
     public static Task getTask(String uniqueId){
         System.out.println("CHECK: " + uniqueId);
-        Query queryRef = ref.orderByChild("uniqueId").equalTo(uniqueId);
-        queryRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-                Map<String, Object> map = snapshot.getValue(Map.class);
-                System.out.println("CHECK: MAP" + map);
-                t = snapshot.getValue(Task.class);
-                System.out.println("CHECK: Task Name -" + t.getName());
+//        Query queryRef = ref.orderByChild("uniqueId").equalTo(uniqueId);
+//        queryRef.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+//                Map<String, Object> map = snapshot.getValue(Map.class);
+//                System.out.println("CHECK: MAP" + map);
+//                t = snapshot.getValue(Task.class);
+//                System.out.println("CHECK: Task Name -" + t.getName());
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//            // ....
+//        });
+//
+//        System.out.println("CHECK: Task Name END-" + t.getName());
+        for(Task task: list){
+            if(task.uniqueId.equals(uniqueId)){
+                t = task;
+                break;
             }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-            // ....
-        });
+        }
+        System.out.println("CHECK: Task Name END-" + t.getName());
         return t;
     }
 

@@ -73,7 +73,10 @@ public class TaskBuilder {
             t.setDeadline(deadline);
             return this;
         }
-
+        public Builder type(String p) {
+            t.setType(p);
+            return this;
+        }
 
         public Builder priority(String p){
             if(p.contains("1"))
